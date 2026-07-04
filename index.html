@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>VGEC Timetable</title>
+
+  <meta name="theme-color" content="#2563eb">
+  <meta name="description" content="VGEC Semester 5 ICT Timetable">
+
+  <link rel="manifest" href="manifest.json">
+
+  <link rel="icon" href="icons/icon-192.png">
+
+  <link rel="apple-touch-icon" href="icons/icon-192.png">
+
+  <link rel="stylesheet" href="style.css">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+  <!-- ========================= -->
+  <!-- Animated Background -->
+  <!-- ========================= -->
+
+  <div class="bg"></div>
+
+  <!-- ========================= -->
+  <!-- Header -->
+  <!-- ========================= -->
+
+  <header class="glass header">
+
+    <div>
+
+      <h1>
+
+        🎓 VGEC Timetable
+
+      </h1>
+
+      <p>
+
+        B.E ICT Semester V
+
+      </p>
+
+    </div>
+
+    <div class="header-right">
+
+      <button id="themeBtn">
+
+        🌙
+
+      </button>
+
+    </div>
+
+  </header>
+
+  <!-- ========================= -->
+  <!-- Status -->
+  <!-- ========================= -->
+
+  <section class="glass status-bar">
+
+    <div class="clock-box">
+
+      <span class="label">
+
+        Current Time
+
+      </span>
+
+      <span id="clock">
+
+        00:00:00
+
+      </span>
+
+    </div>
+
+    <div class="day-box">
+
+      <span class="label">
+
+        Today
+
+      </span>
+
+      <span id="today">
+
+        Monday
+
+      </span>
+
+    </div>
+
+  </section>
+
+  <!-- ========================= -->
+  <!-- Live Status -->
+  <!-- ========================= -->
+
+  <section class="glass live-status">
+
+    <h2 id="liveTitle">
+
+      Loading...
+
+    </h2>
+
+    <p id="liveSubtitle">
+
+      Please wait...
+
+    </p>
+
+  </section>
+
+  <!-- ========================= -->
+  <!-- Progress -->
+  <!-- ========================= -->
+
+  <section class="glass progress-card">
+
+    <div class="progress-header">
+
+      <span>
+
+        Lecture Progress
+
+      </span>
+
+      <span id="progressPercent">
+
+        0%
+
+      </span>
+
+    </div>
+
+    <div class="progress">
+
+      <div id="progressBar">
+
+      </div>
+
+    </div>
+
+  </section>
+
+  <!-- ========================= -->
+  <!-- Timetable -->
+  <!-- ========================= -->
+
+  <main id="timetableContainer">
+
+  </main>
+
+  <!-- ========================= -->
+  <!-- Legend -->
+  <!-- ========================= -->
+
+  <section class="glass legend">
+
+    <h3>
+
+      Subject Colors
+
+    </h3>
+
+    <div class="legend-grid">
+
+      <div class="legend-item cn">
+
+        CN
+
+      </div>
+
+      <div class="legend-item pds">
+
+        PDS
+
+      </div>
+
+      <div class="legend-item adc">
+
+        ADC
+
+      </div>
+
+      <div class="legend-item ajp">
+
+        AJP
+
+      </div>
+
+      <div class="legend-item sas">
+
+        SAS
+
+      </div>
+
+      <div class="legend-item mopec">
+
+        MOPEC
+
+      </div>
+
+      <div class="legend-item lab">
+
+        LAB
+
+      </div>
+
+    </div>
+
+  </section>
+
+  <!-- ========================= -->
+  <!-- Footer -->
+  <!-- ========================= -->
+
+  <footer class="glass footer">
+
+    <p>
+
+      Vishwakarma Government Engineering College
+
+    </p>
+
+    <p>
+
+      ICT Semester V • O4 Batch
+
+    </p>
+
+  </footer>
+
+  <!-- ========================= -->
+  <!-- Install Button -->
+  <!-- ========================= -->
+
+  <button id="installBtn" hidden>
+
+    Install App
+
+  </button>
+
+  <!-- ========================= -->
+  <!-- Template -->
+  <!-- ========================= -->
+
+  <template id="dayTemplate">
+
+    <section class="glass day-card">
+
+      <h2 class="day-title">
+
+      </h2>
+
+      <div class="lecture-list">
+
+      </div>
+
+    </section>
+
+  </template>
+
+  <template id="lectureTemplate">
+
+    <article class="lecture">
+
+      <div class="lecture-top">
+
+        <div class="subject">
+
+        </div>
+
+        <div class="time">
+
+        </div>
+
+      </div>
+
+      <div class="details">
+
+        <span class="faculty">
+
+        </span>
+
+        <span class="room">
+
+        </span>
+
+      </div>
+
+      <div class="badge">
+
+      </div>
+
+    </article>
+
+  </template>
+
+  <!-- ========================= -->
+  <!-- Scripts -->
+  <!-- ========================= -->
+
+  <script src="app.js"></script>
+
+</body>
+
+</html>
