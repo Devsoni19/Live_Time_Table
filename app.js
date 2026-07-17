@@ -12,6 +12,16 @@
  * - Confetti celebration at Friday college completion
  */
 
+import {
+  db,
+  collection,
+  addDoc,
+  deleteDoc,
+  doc,
+  onSnapshot,
+  serverTimestamp
+} from "./firebase.js";
+
 (function () {
   'use strict';
 
@@ -1020,19 +1030,25 @@
    * Initializes announcements from LocalStorage or default fallback
    */
   function initAnnouncements() {
-    const cached = localStorage.getItem("vgec_announcements");
-    if (cached) {
-      try {
-        announcements = JSON.parse(cached);
-      } catch (err) {
-        console.error("Failed to parse cached announcements:", err);
-        announcements = [...DEFAULT_ANNOUNCEMENTS];
-      }
-    } else {
-      announcements = [...DEFAULT_ANNOUNCEMENTS];
-      localStorage.setItem("vgec_announcements", JSON.stringify(announcements));
-    }
-    renderAnnouncements();
+
+    onSnapshot(collection(db, "announcements"), (snapshot) => {
+
+      announcements = [];
+
+      snapshot.forEach((docSnap) => {
+
+        announcements.push({
+          id: docSnap.id,
+          ...docSnap.data()
+        });
+
+      });
+
+      renderAnnouncements();
+      renderAdminAnnouncementsList();
+
+    });
+
   }
 
   /**
@@ -1157,7 +1173,7 @@
   /**
    * Adds a new announcement to the local store
    */
-  function handleAddAnnouncement() {
+  async function handleAddAnnouncement() {
     const type = ELEMENTS.announcementType.value;
     const date = ELEMENTS.announcementDate.value;
     const title = ELEMENTS.announcementTitle.value.trim();
@@ -1168,41 +1184,33 @@
       return;
     }
 
-    const newAnn = {
-      id: "ann-" + Date.now().toString(),
+    await addDoc(collection(db, "announcements"), {
       type,
       title,
       date,
-      desc
-    };
+      desc,
+      createdAt: serverTimestamp()
+    });
 
-    announcements.push(newAnn);
-    saveAnnouncements();
-
-    // Reset Form fields
     ELEMENTS.announcementTitle.value = "";
     ELEMENTS.announcementDesc.value = "";
     ELEMENTS.announcementDate.value = "";
   }
 
+
   /**
    * Deletes an announcement by ID
    */
-  function deleteAnnouncement(id) {
-    if (confirm("Are you sure you want to delete this announcement?")) {
-      announcements = announcements.filter(ann => ann.id !== id);
-      saveAnnouncements();
-    }
+  async function deleteAnnouncement(id) {
+    if (!confirm("Are you sure you want to delete this announcement?"))
+      return;
+
+    await deleteDoc(doc(db, "announcements", id));
   }
 
   /**
    * Save announcements array to LocalStorage and refresh renders
    */
-  function saveAnnouncements() {
-    localStorage.setItem("vgec_announcements", JSON.stringify(announcements));
-    renderAnnouncements();
-    renderAdminAnnouncementsList();
-  }
 
   // ==========================================
   // Admin Overlay Control Functions
@@ -1270,7 +1278,6 @@
           const isValid = imported.every(item => item.id && item.type && item.title && item.date);
           if (isValid) {
             announcements = imported;
-            saveAnnouncements();
             alert("Announcements configuration imported successfully!");
           } else {
             alert("Error: File contains invalid structure. Make sure all items have an id, type, title, and date.");
