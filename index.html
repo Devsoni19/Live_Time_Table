@@ -1,324 +1,392 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-  <title>VGEC Timetable</title>
-
+  
+  <title>VGEC Timetable - ICT Sem V O4</title>
+  
   <meta name="theme-color" content="#2563eb">
-  <meta name="description" content="VGEC Semester 5 ICT Timetable">
-
+  <meta name="description" content="A premium, production-ready Progressive Web App for VGEC ICT Semester 5 (O4 Batch) Timetable with live tracking, notifications, offline support, and dark mode.">
+  
+  <!-- SEO & Social Meta Tags -->
+  <meta property="og:title" content="VGEC Timetable - ICT Sem V O4">
+  <meta property="og:description" content="Live progress, classroom locator, and offline schedule for VGEC B.E. Semester 5 ICT O4 Batch.">
+  <meta property="og:type" content="website">
+  
+  <!-- PWA Support -->
   <link rel="manifest" href="manifest.json">
-
-  <link rel="icon" href="icons/icon-192.png">
-
+  <link rel="icon" href="icons/icon-192.png" type="image/png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
-
+  
+  <!-- Stylesheets -->
   <link rel="stylesheet" href="style.css">
-
+  
+  <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
-
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
-
 <body>
 
-  <!-- ========================= -->
-  <!-- Animated Background -->
-  <!-- ========================= -->
+  <!-- ========================================== -->
+  <!-- Animated Background Blobs -->
+  <!-- ========================================== -->
+  <div class="bg-blobs" aria-hidden="true">
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+    <div class="blob blob-3"></div>
+  </div>
 
-  <div class="bg"></div>
+  <!-- ========================================== -->
+  <!-- Loading Skeleton Screen -->
+  <!-- ========================================== -->
+  <div id="loadingScreen" class="loading-screen" aria-live="polite">
+    <div class="loading-spinner"></div>
+    <p>Initializing VGEC Timetable...</p>
+  </div>
 
-  <!-- ========================= -->
-  <!-- Header -->
-  <!-- ========================= -->
+  <!-- ========================================== -->
+  <!-- Application Container -->
+  <!-- ========================================== -->
+  <div class="app-container">
 
-  <header class="glass header">
+    <!-- ========================================== -->
+    <!-- Header -->
+    <!-- ========================================== -->
+    <header class="glass main-header" id="mainHeader">
+      <div class="header-left">
+        <div class="logo-area">
+          <img src="logo.png" alt="VGEC Logo" class="logo-img">
+          <div>
+            <h1>VGEC Timetable</h1>
+            <p class="subtitle">ICT Sem V • O4 Batch</p>
+          </div>
+        </div>
+      </div>
+      
+      <div class="header-right">
+        <!-- Online/Offline Indicator -->
+        <div id="networkStatus" class="network-badge online" title="Network Connection Status">
+          <span class="status-dot"></span>
+          <span class="status-text">Online</span>
+        </div>
+        
+        <!-- Toggle Notifications -->
+        <button id="notifBtn" class="glass-btn icon-btn" title="Enable Lecture Notifications" aria-label="Toggle notifications">
+          🔔
+        </button>
+        
+        <!-- Theme Toggle -->
+        <button id="themeBtn" class="glass-btn icon-btn" title="Toggle Theme (Shortcut: T)" aria-label="Toggle dark mode">
+          🌙
+        </button>
+        
+        <!-- Admin Access -->
+        <button id="adminBtn" class="glass-btn icon-btn" title="Admin Portal" aria-label="Open admin portal">
+          🔒
+        </button>
+      </div>
+    </header>
 
-    <div>
-
-      <h1>
-
-        🎓 VGEC Timetable
-
-      </h1>
-
-      <p>
-
-        B.E ICT Semester V
-
-      </p>
-
-    </div>
-
-    <div class="header-right">
-
-      <button id="themeBtn">
-
-        🌙
-
-      </button>
-
-    </div>
-
-  </header>
-
-  <!-- ========================= -->
-  <!-- Status -->
-  <!-- ========================= -->
-
-  <section class="glass status-bar">
-
-    <div class="clock-box">
-
-      <span class="label">
-
-        Current Time
-
-      </span>
-
-      <span id="clock">
-
-        00:00:00
-
-      </span>
-
-    </div>
-
-    <div class="day-box">
-
-      <span class="label">
-
-        Today
-
-      </span>
-
-      <span id="today">
-
-        Monday
-
-      </span>
-
-    </div>
-
-  </section>
-
-  <!-- ========================= -->
-  <!-- Live Status -->
-  <!-- ========================= -->
-
-  <section class="glass live-status">
-
-    <h2 id="liveTitle">
-
-      Loading...
-
-    </h2>
-
-    <p id="liveSubtitle">
-
-      Please wait...
-
-    </p>
-
-  </section>
-
-  <!-- ========================= -->
-  <!-- Progress -->
-  <!-- ========================= -->
-
-  <section class="glass progress-card">
-
-    <div class="progress-header">
-
-      <span>
-
-        Lecture Progress
-
-      </span>
-
-      <span id="progressPercent">
-
-        0%
-
-      </span>
-
-    </div>
-
-    <div class="progress">
-
-      <div id="progressBar">
-
+    <!-- ========================================== -->
+    <!-- Live Status Panel -->
+    <!-- ========================================== -->
+    <section class="glass status-panel" id="statusPanel" aria-labelledby="statusPanelTitle">
+      <h2 id="statusPanelTitle" class="sr-only">Live Schedule Status</h2>
+      
+      <div class="status-meta">
+        <div class="status-meta-item">
+          <span class="meta-label">Current Time</span>
+          <time id="clock" class="meta-value">00:00:00</time>
+        </div>
+        <div class="status-meta-item">
+          <span class="meta-label">Today's Date</span>
+          <span id="currentDate" class="meta-value">Loading...</span>
+        </div>
+        <div class="status-meta-item">
+          <span class="meta-label">Academic Term</span>
+          <span class="meta-value term-badge">Winter 2026</span>
+        </div>
       </div>
 
-    </div>
+      <hr class="panel-divider">
 
-  </section>
+      <div class="live-tracker">
+        <div class="tracker-header">
+          <div class="tracker-title-box">
+            <span class="tracker-badge" id="trackerBadge">LIVE NOW</span>
+            <h3 id="liveTitle" class="tracker-title">Checking classes...</h3>
+          </div>
+          <span id="progressPercent" class="progress-percentage">0%</span>
+        </div>
+        
+        <p id="liveSubtitle" class="tracker-subtitle">Please wait, updating timetable data.</p>
+        
+        <!-- Live Lecture Progress Bar -->
+        <div class="progress-bar-container" id="progressBarContainer">
+          <div id="progressBar" class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" aria-label="Current lecture progress"></div>
+        </div>
 
-  <!-- ========================= -->
-  <!-- Timetable -->
-  <!-- ========================= -->
-
-  <main id="timetableContainer">
-
-  </main>
-
-  <!-- ========================= -->
-  <!-- Legend -->
-  <!-- ========================= -->
-
-  <section class="glass legend">
-
-    <h3>
-
-      Subject Colors
-
-    </h3>
-
-    <div class="legend-grid">
-
-      <div class="legend-item cn">
-
-        CN
-
+        <div class="tracker-footer" id="trackerFooter">
+          <span class="tracker-time-pill elapsed">Elapsed: <span id="timeElapsed">0m</span></span>
+          <span class="tracker-time-pill remaining">Remaining: <span id="timeRemaining">0m</span></span>
+        </div>
       </div>
-
-      <div class="legend-item pds">
-
-        PDS
-
-      </div>
-
-      <div class="legend-item adc">
-
-        ADC
-
-      </div>
-
-      <div class="legend-item ajp">
-
-        AJP
-
-      </div>
-
-      <div class="legend-item sas">
-
-        SAS
-
-      </div>
-
-      <div class="legend-item mopec">
-
-        MOPEC
-
-      </div>
-
-      <div class="legend-item lab">
-
-        LAB
-
-      </div>
-
-    </div>
-
-  </section>
-
-  <!-- ========================= -->
-  <!-- Footer -->
-  <!-- ========================= -->
-
-  <footer class="glass footer">
-
-    <p>
-
-      Vishwakarma Government Engineering College
-
-    </p>
-
-    <p>
-
-      ICT Semester V • O4 Batch
-
-    </p>
-
-  </footer>
-
-  <!-- ========================= -->
-  <!-- Install Button -->
-  <!-- ========================= -->
-
-  <button id="installBtn" hidden>
-
-    Install App
-
-  </button>
-
-  <!-- ========================= -->
-  <!-- Template -->
-  <!-- ========================= -->
-
-  <template id="dayTemplate">
-
-    <section class="glass day-card">
-
-      <h2 class="day-title">
-
-      </h2>
-
-      <div class="lecture-list">
-
-      </div>
-
     </section>
 
+    <!-- ========================================== -->
+    <!-- Announcements Section -->
+    <!-- ========================================== -->
+    <section class="glass announcements-panel hidden" id="announcementsPanel" aria-labelledby="announcementsTitle">
+      <div class="announcements-header">
+        <div class="announcements-title-wrapper">
+          <span class="announcements-icon">📢</span>
+          <h2 id="announcementsTitle">Important Announcements</h2>
+        </div>
+        <span class="announcements-count" id="announcementsCount">0 Active</span>
+      </div>
+      <div class="announcements-container" id="announcementsContainer">
+        <!-- Announcements cards will be injected here dynamically -->
+      </div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- Dashboard Controls -->
+    <!-- ========================================== -->
+    <section class="glass controls-panel">
+      <div class="search-box">
+        <span class="search-icon">🔍</span>
+        <input type="search" id="searchInput" placeholder="Search subject, faculty, or room..." aria-label="Search lectures">
+      </div>
+      
+      <div class="view-toggles">
+        <button id="btnDailyView" class="toggle-btn active" aria-selected="true">Daily View</button>
+        <button id="btnWeeklyView" class="toggle-btn" aria-selected="false">Weekly View</button>
+      </div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- Tomorrow/Next Preview Card -->
+    <!-- ========================================== -->
+    <section class="glass preview-panel" id="previewPanel">
+      <div class="preview-header">
+        <h4>📋 Schedule Preview</h4>
+      </div>
+      <div class="preview-content" id="previewContent">
+        <!-- Will be populated dynamically by JS -->
+      </div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- Timetable Container -->
+    <!-- ========================================== -->
+    <main class="timetable-main">
+      <div id="timetableContainer" class="timetable-grid daily-active">
+        <!-- Day sections will be loaded here dynamically -->
+      </div>
+    </main>
+
+    <!-- ========================================== -->
+    <!-- Subject Color Legend -->
+    <!-- ========================================== -->
+    <section class="glass legend-panel" aria-labelledby="legendTitle">
+      <h3 id="legendTitle">Subject Color Code</h3>
+      <div class="legend-grid">
+        <div class="legend-item cn-accent">
+          <span class="legend-color"></span>
+          <span class="legend-name">CN (Computer Networks)</span>
+        </div>
+        <div class="legend-item pds-accent">
+          <span class="legend-color"></span>
+          <span class="legend-name">PDS (Python for Data Science)</span>
+        </div>
+        <div class="legend-item adc-accent">
+          <span class="legend-color"></span>
+          <span class="legend-name">ADC (Analog & Digital Comm.)</span>
+        </div>
+        <div class="legend-item ajp-accent">
+          <span class="legend-color"></span>
+          <span class="legend-name">AJP (Advanced Java Programming)</span>
+        </div>
+        <div class="legend-item sas-accent">
+          <span class="legend-color"></span>
+          <span class="legend-name">SAS (Signals & Systems)</span>
+        </div>
+        <div class="legend-item mopec-accent">
+          <span class="legend-color"></span>
+          <span class="legend-name">MOPEC</span>
+        </div>
+        <div class="legend-item lab-accent">
+          <span class="legend-color"></span>
+          <span class="legend-name">LAB (All Batches/O4)</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- Footer -->
+    <!-- ========================================== -->
+    <footer class="glass main-footer">
+      <p class="college-name">Vishwakarma Government Engineering College, Chandkheda</p>
+      <p class="department">B.E. ICT Department • Academic Term Odd 2026-27</p>
+      <div class="footer-bottom">
+        <span class="app-version">Version 1.1.0</span>
+        <span class="shortcut-tip">Tip: Press <kbd>T</kbd> to toggle Dark Mode</span>
+      </div>
+    </footer>
+
+  </div>
+
+  <!-- ========================================== -->
+  <!-- Install App Prompt Button (Floating PWA) -->
+  <!-- ========================================== -->
+  <button id="installBtn" class="floating-install-btn hidden" aria-label="Install application">
+    <span class="install-icon">📥</span> Install App
+  </button>
+
+  <!-- ========================================== -->
+  <!-- HTML Templates -->
+  <!-- ========================================== -->
+  
+  <!-- Template for Day Container -->
+  <template id="dayTemplate">
+    <section class="glass day-card" data-day="">
+      <header class="day-card-header">
+        <h3 class="day-title">Monday</h3>
+        <button class="collapse-btn" aria-label="Toggle day visibility">▼</button>
+      </header>
+      <div class="lecture-list">
+        <!-- Lecture articles will be injected here -->
+      </div>
+    </section>
   </template>
 
+  <!-- Template for Lecture Item -->
   <template id="lectureTemplate">
-
-    <article class="lecture">
-
-      <div class="lecture-top">
-
-        <div class="subject">
-
+    <article class="lecture-item">
+      <div class="lecture-time-column">
+        <time class="start-time">10:30 AM</time>
+        <div class="time-connector"></div>
+        <time class="end-time">11:30 AM</time>
+      </div>
+      
+      <div class="lecture-content-card">
+        <div class="lecture-header">
+          <h4 class="lecture-subject">Subject Name</h4>
+          <span class="lecture-type-badge">Lecture</span>
         </div>
-
-        <div class="time">
-
+        <div class="lecture-meta-row">
+          <span class="lecture-faculty" title="Faculty Initials">
+            <span class="meta-icon">👨‍🏫</span>
+            <span class="faculty-name">ABC</span>
+          </span>
+          <span class="lecture-room" title="Room Number">
+            <span class="meta-icon">📍</span>
+            <span class="room-number">M-301</span>
+          </span>
         </div>
-
       </div>
-
-      <div class="details">
-
-        <span class="faculty">
-
-        </span>
-
-        <span class="room">
-
-        </span>
-
-      </div>
-
-      <div class="badge">
-
-      </div>
-
     </article>
-
   </template>
 
-  <!-- ========================= -->
+  <!-- ========================================== -->
+  <!-- Admin Modal Overlay -->
+  <!-- ========================================== -->
+  <div id="adminModal" class="modal-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <div class="glass modal-content">
+      <button class="modal-close-btn" id="modalCloseBtn" aria-label="Close modal">&times;</button>
+      
+      <!-- Login View -->
+      <div id="adminLoginView" class="admin-view">
+        <h3 id="modalTitle">🔑 Admin Login</h3>
+        <p class="modal-desc">Enter the administrator password to manage announcements.</p>
+        <form id="loginForm" onsubmit="return false;">
+          <div class="input-group">
+            <label for="adminPassword">Password</label>
+            <input type="password" id="adminPassword" placeholder="Enter password..." required autocomplete="current-password">
+          </div>
+          <button type="submit" id="btnLoginSubmit" class="glass-btn primary-btn">Login</button>
+        </form>
+      </div>
+      
+      <!-- Dashboard View -->
+      <div id="adminDashboardView" class="admin-view hidden">
+        <h3>⚙ Admin Dashboard</h3>
+        <p class="modal-desc">Create or manage announcements. Expired notices are auto-hidden.</p>
+        
+        <form id="announcementForm" onsubmit="return false;" class="admin-form">
+          <div class="form-row">
+            <div class="input-group">
+              <label for="announcementType">Type</label>
+              <select id="announcementType" required>
+                <option value="exam-mid">📝 Mid-Term Exam</option>
+                <option value="exam-final">🎓 Final Exam</option>
+                <option value="assignment">📂 Assignment Deadline</option>
+                <option value="notice">🔔 Notice / Alert</option>
+              </select>
+            </div>
+            <div class="input-group">
+              <label for="announcementDate">Date / Deadline</label>
+              <input type="date" id="announcementDate" required>
+            </div>
+          </div>
+          
+          <div class="input-group">
+            <label for="announcementTitle">Title</label>
+            <input type="text" id="announcementTitle" placeholder="e.g. Mid-Sem Examination Starts" required>
+          </div>
+          
+          <div class="input-group">
+            <label for="announcementDesc">Details (Optional)</label>
+            <textarea id="announcementDesc" rows="2" placeholder="e.g. Syllabus covers Unit 1 to 3..."></textarea>
+          </div>
+          
+          <div class="form-actions">
+            <button type="submit" id="btnSaveAnnouncement" class="glass-btn primary-btn">Add Announcement</button>
+            <button type="button" id="btnExportAnnouncements" class="glass-btn">Export JSON</button>
+            <button type="button" id="btnImportAnnouncements" class="glass-btn">Import JSON</button>
+            <input type="file" id="importFile" accept=".json" class="hidden">
+          </div>
+        </form>
+        
+        <hr class="panel-divider">
+        
+        <div class="admin-announcements-list">
+          <h4>Active Announcements</h4>
+          <div id="adminAnnouncementsList" class="admin-list-container">
+            <!-- Admin items loaded dynamically -->
+          </div>
+        </div>
+        
+        <button id="btnAdminLogout" class="glass-btn danger-btn logout-btn">Log Out</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================== -->
+  <!-- Template for Announcement Card -->
+  <!-- ========================================== -->
+  <template id="announcementCardTemplate">
+    <article class="announcement-card">
+      <div class="announcement-badge-row">
+        <span class="announcement-type-badge">Notice</span>
+        <span class="announcement-countdown">Due soon</span>
+      </div>
+      <h4 class="announcement-title-text">Title</h4>
+      <p class="announcement-desc-text">Description</p>
+      <div class="announcement-footer">
+        <span class="announcement-date">📅 15th Aug 2026</span>
+      </div>
+    </article>
+  </template>
+
+  <!-- ========================================== -->
   <!-- Scripts -->
-  <!-- ========================= -->
-
+  <!-- ========================================== -->
+  <!-- JS Confetti Vanilla Fallback -->
+  <div id="confettiContainer" class="confetti-container" aria-hidden="true"></div>
+  
   <script src="app.js"></script>
-
 </body>
-
 </html>
