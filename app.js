@@ -129,7 +129,7 @@
   // Announcements & Admin Panel State
   let isAdminLoggedIn = false;
   let announcements = [];
-  // const DEFAULT_ANNOUNCEMENTS = [
+  const DEFAULT_ANNOUNCEMENTS = [];
   //   {
   //     id: "ann-default-1",
   //     type: "exam-mid",
@@ -152,7 +152,6 @@
   //     desc: "Final external university exams are expected to commence tentatively in late November. Keep checking official GTU portal."
   //   }
   // ];
-
   // ==========================================
   // 3. Time Utilities
   // ==========================================
