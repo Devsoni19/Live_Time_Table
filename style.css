@@ -992,8 +992,7 @@ body.dark .lecture-type-badge {
   color: var(--text-sub);
 }
 
-.lecture-faculty,
-.lecture-room {
+.lecture-faculty {
   display: inline-flex;
   align-items: center;
   gap: 6px;

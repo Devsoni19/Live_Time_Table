@@ -1,32 +1,38 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  
+
   <title>VGEC Timetable - ICT Sem V O4</title>
-  
+
   <meta name="theme-color" content="#2563eb">
-  <meta name="description" content="A premium, production-ready Progressive Web App for VGEC ICT Semester 5 (O4 Batch) Timetable with live tracking, notifications, offline support, and dark mode.">
-  
+  <meta name="description"
+    content="A premium, production-ready Progressive Web App for VGEC ICT Semester 5 (O4 Batch) Timetable with live tracking, notifications, offline support, and dark mode.">
+
   <!-- SEO & Social Meta Tags -->
   <meta property="og:title" content="VGEC Timetable - ICT Sem V O4">
-  <meta property="og:description" content="Live progress, classroom locator, and offline schedule for VGEC B.E. Semester 5 ICT O4 Batch.">
+  <meta property="og:description"
+    content="Live progress, classroom locator, and offline schedule for VGEC B.E. Semester 5 ICT O4 Batch.">
   <meta property="og:type" content="website">
-  
+
   <!-- PWA Support -->
   <link rel="manifest" href="manifest.json">
   <link rel="icon" href="icons/icon-192.png" type="image/png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
-  
+
   <!-- Stylesheets -->
   <link rel="stylesheet" href="style.css">
-  
+
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Poppins:wght@300;400;500;600;700&display=swap"
+    rel="stylesheet">
 </head>
+
 <body>
 
   <!-- ========================================== -->
@@ -64,24 +70,26 @@
           </div>
         </div>
       </div>
-      
+
       <div class="header-right">
         <!-- Online/Offline Indicator -->
         <div id="networkStatus" class="network-badge online" title="Network Connection Status">
           <span class="status-dot"></span>
           <span class="status-text">Online</span>
         </div>
-        
+
         <!-- Toggle Notifications -->
-        <button id="notifBtn" class="glass-btn icon-btn" title="Enable Lecture Notifications" aria-label="Toggle notifications">
+        <button id="notifBtn" class="glass-btn icon-btn" title="Enable Lecture Notifications"
+          aria-label="Toggle notifications">
           🔔
         </button>
-        
+
         <!-- Theme Toggle -->
-        <button id="themeBtn" class="glass-btn icon-btn" title="Toggle Theme (Shortcut: T)" aria-label="Toggle dark mode">
+        <button id="themeBtn" class="glass-btn icon-btn" title="Toggle Theme (Shortcut: T)"
+          aria-label="Toggle dark mode">
           🌙
         </button>
-        
+
         <!-- Admin Access -->
         <button id="adminBtn" class="glass-btn icon-btn" title="Admin Portal" aria-label="Open admin portal">
           🔒
@@ -94,7 +102,7 @@
     <!-- ========================================== -->
     <section class="glass status-panel" id="statusPanel" aria-labelledby="statusPanelTitle">
       <h2 id="statusPanelTitle" class="sr-only">Live Schedule Status</h2>
-      
+
       <div class="status-meta">
         <div class="status-meta-item">
           <span class="meta-label">Current Time</span>
@@ -120,12 +128,13 @@
           </div>
           <span id="progressPercent" class="progress-percentage">0%</span>
         </div>
-        
+
         <p id="liveSubtitle" class="tracker-subtitle">Please wait, updating timetable data.</p>
-        
+
         <!-- Live Lecture Progress Bar -->
         <div class="progress-bar-container" id="progressBarContainer">
-          <div id="progressBar" class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" aria-label="Current lecture progress"></div>
+          <div id="progressBar" class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0"
+            aria-valuemax="100" aria-label="Current lecture progress"></div>
         </div>
 
         <div class="tracker-footer" id="trackerFooter">
@@ -157,9 +166,10 @@
     <section class="glass controls-panel">
       <div class="search-box">
         <span class="search-icon">🔍</span>
-        <input type="search" id="searchInput" placeholder="Search subject, faculty, or room..." aria-label="Search lectures">
+        <input type="search" id="searchInput" placeholder="Search subject, faculty, or room..."
+          aria-label="Search lectures">
       </div>
-      
+
       <div class="view-toggles">
         <button id="btnDailyView" class="toggle-btn active" aria-selected="true">Daily View</button>
         <button id="btnWeeklyView" class="toggle-btn" aria-selected="false">Weekly View</button>
@@ -248,7 +258,7 @@
   <!-- ========================================== -->
   <!-- HTML Templates -->
   <!-- ========================================== -->
-  
+
   <!-- Template for Day Container -->
   <template id="dayTemplate">
     <section class="glass day-card" data-day="">
@@ -270,7 +280,7 @@
         <div class="time-connector"></div>
         <time class="end-time">11:30 AM</time>
       </div>
-      
+
       <div class="lecture-content-card">
         <div class="lecture-header">
           <h4 class="lecture-subject">Subject Name</h4>
@@ -280,11 +290,11 @@
           <span class="lecture-faculty" title="Faculty Initials">
             <span class="meta-icon">👨‍🏫</span>
             <span class="faculty-name">ABC</span>
-          </span>
-          <span class="lecture-room" title="Room Number">
-            <span class="meta-icon">📍</span>
-            <span class="room-number">M-301</span>
-          </span>
+            <!-- </span> -->
+            <!-- <span class="lecture-room" title="Room Number"> -->
+            <!-- <span class="meta-icon">📍</span> -->
+            <!-- <span class="room-number">M-301</span> -->
+            <!-- </span> -->
         </div>
       </div>
     </article>
@@ -296,7 +306,7 @@
   <div id="adminModal" class="modal-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
     <div class="glass modal-content">
       <button class="modal-close-btn" id="modalCloseBtn" aria-label="Close modal">&times;</button>
-      
+
       <!-- Login View -->
       <div id="adminLoginView" class="admin-view">
         <h3 id="modalTitle">🔑 Admin Login</h3>
@@ -304,17 +314,18 @@
         <form id="loginForm" onsubmit="return false;">
           <div class="input-group">
             <label for="adminPassword">Password</label>
-            <input type="password" id="adminPassword" placeholder="Enter password..." required autocomplete="current-password">
+            <input type="password" id="adminPassword" placeholder="Enter password..." required
+              autocomplete="current-password">
           </div>
           <button type="submit" id="btnLoginSubmit" class="glass-btn primary-btn">Login</button>
         </form>
       </div>
-      
+
       <!-- Dashboard View -->
       <div id="adminDashboardView" class="admin-view hidden">
         <h3>⚙ Admin Dashboard</h3>
         <p class="modal-desc">Create or manage announcements. Expired notices are auto-hidden.</p>
-        
+
         <form id="announcementForm" onsubmit="return false;" class="admin-form">
           <div class="form-row">
             <div class="input-group">
@@ -331,17 +342,17 @@
               <input type="date" id="announcementDate" required>
             </div>
           </div>
-          
+
           <div class="input-group">
             <label for="announcementTitle">Title</label>
             <input type="text" id="announcementTitle" placeholder="e.g. Mid-Sem Examination Starts" required>
           </div>
-          
+
           <div class="input-group">
             <label for="announcementDesc">Details (Optional)</label>
             <textarea id="announcementDesc" rows="2" placeholder="e.g. Syllabus covers Unit 1 to 3..."></textarea>
           </div>
-          
+
           <div class="form-actions">
             <button type="submit" id="btnSaveAnnouncement" class="glass-btn primary-btn">Add Announcement</button>
             <button type="button" id="btnExportAnnouncements" class="glass-btn">Export JSON</button>
@@ -349,16 +360,16 @@
             <input type="file" id="importFile" accept=".json" class="hidden">
           </div>
         </form>
-        
+
         <hr class="panel-divider">
-        
+
         <div class="admin-announcements-list">
           <h4>Active Announcements</h4>
           <div id="adminAnnouncementsList" class="admin-list-container">
             <!-- Admin items loaded dynamically -->
           </div>
         </div>
-        
+
         <button id="btnAdminLogout" class="glass-btn danger-btn logout-btn">Log Out</button>
       </div>
     </div>
@@ -386,7 +397,8 @@
   <!-- ========================================== -->
   <!-- JS Confetti Vanilla Fallback -->
   <div id="confettiContainer" class="confetti-container" aria-hidden="true"></div>
-  
+
   <script src="app.js"></script>
 </body>
+
 </html>

@@ -27,7 +27,7 @@
     notifBtn: document.getElementById("notifBtn"),
     installBtn: document.getElementById("installBtn"),
     adminBtn: document.getElementById("adminBtn"),
-    
+
     // Status Tracker
     trackerBadge: document.getElementById("trackerBadge"),
     liveTitle: document.getElementById("liveTitle"),
@@ -36,14 +36,14 @@
     progressPercent: document.getElementById("progressPercent"),
     timeElapsed: document.getElementById("timeElapsed"),
     timeRemaining: document.getElementById("timeRemaining"),
-    
+
     // Search & Views
     searchInput: document.getElementById("searchInput"),
     btnDailyView: document.getElementById("btnDailyView"),
     btnWeeklyView: document.getElementById("btnWeeklyView"),
     previewContent: document.getElementById("previewContent"),
     timetableContainer: document.getElementById("timetableContainer"),
-    
+
     // Announcements & Admin
     announcementsPanel: document.getElementById("announcementsPanel"),
     announcementsCount: document.getElementById("announcementsCount"),
@@ -64,7 +64,7 @@
     btnExportAnnouncements: document.getElementById("btnExportAnnouncements"),
     btnImportAnnouncements: document.getElementById("btnImportAnnouncements"),
     importFile: document.getElementById("importFile"),
-    
+
     // Templates
     dayTemplate: document.getElementById("dayTemplate"),
     lectureTemplate: document.getElementById("lectureTemplate"),
@@ -88,33 +88,33 @@
   // ==========================================
   const TIMETABLE = {
     "Monday": [
-      { subject: "CN", faculty: "JKN", room: "M-301", start: "10:30", end: "11:30", type: "Lecture" },
-      { subject: "PDS", faculty: "KBC", room: "M-301", start: "11:30", end: "12:30", type: "Lecture" },
-      { subject: "MOPEC", faculty: "-", room: "M-301", start: "13:15", end: "14:15", type: "Lecture" },
-      { subject: "SAS", faculty: "ARA", room: "F-101", start: "15:30", end: "17:30", type: "Lab" }
+      { subject: "CN", faculty: "JKN", start: "10:30", end: "11:30", type: "Lecture" },
+      { subject: "PDS", faculty: "KBC", start: "11:30", end: "12:30", type: "Lecture" },
+      { subject: "MOPEC", faculty: "-", start: "13:15", end: "14:15", type: "Lecture" },
+      { subject: "SAS", faculty: "ARA", start: "15:30", end: "17:30", type: "Lab" }
     ],
     "Tuesday": [
-      { subject: "PDS", faculty: "KBC", room: "M-301", start: "10:30", end: "11:30", type: "Lecture" },
-      { subject: "CN", faculty: "JKN", room: "M-301", start: "11:30", end: "12:30", type: "Lecture" },
-      { subject: "MOPEC", faculty: "-", room: "M-301", start: "13:15", end: "14:15", type: "Lecture" },
-      { subject: "AJP", faculty: "ARA", room: "F-204", start: "15:30", end: "17:30", type: "Lab" }
+      { subject: "PDS", faculty: "KBC", start: "10:30", end: "11:30", type: "Lecture" },
+      { subject: "CN", faculty: "JKN", start: "11:30", end: "12:30", type: "Lecture" },
+      { subject: "MOPEC", faculty: "-", start: "13:15", end: "14:15", type: "Lecture" },
+      { subject: "AJP", faculty: "ARA", start: "15:30", end: "17:30", type: "Lab" }
     ],
     "Wednesday": [
-      { subject: "ADC", faculty: "VF", room: "M-301", start: "10:30", end: "11:30", type: "Lecture" },
-      { subject: "AJP", faculty: "ZBM", room: "M-301", start: "11:30", end: "12:30", type: "Lecture" },
-      { subject: "MOPEC", faculty: "-", room: "M-301", start: "13:15", end: "14:15", type: "Lecture" },
-      { subject: "CN", faculty: "KBC", room: "M-301", start: "15:30", end: "17:30", type: "Lecture" }
+      { subject: "ADC", faculty: "VF", start: "10:30", end: "11:30", type: "Lecture" },
+      { subject: "AJP", faculty: "ZBM", start: "11:30", end: "12:30", type: "Lecture" },
+      { subject: "MOPEC", faculty: "-", start: "13:15", end: "14:15", type: "Lecture" },
+      { subject: "CN", faculty: "KBC", start: "15:30", end: "17:30", type: "Lecture" }
     ],
     "Thursday": [
-      { subject: "AJP", faculty: "VF", room: "M-301", start: "10:30", end: "11:30", type: "Lecture" },
-      { subject: "ADC", faculty: "UNF", room: "M-301", start: "11:30", end: "12:30", type: "Lecture" },
-      { subject: "PDS", faculty: "KBC", room: "M-301", start: "13:15", end: "14:15", type: "Lecture" }
+      { subject: "AJP", faculty: "VF", start: "10:30", end: "11:30", type: "Lecture" },
+      { subject: "ADC", faculty: "UNF", start: "11:30", end: "12:30", type: "Lecture" },
+      { subject: "PDS", faculty: "KBC", start: "13:15", end: "14:15", type: "Lecture" }
       // Thursday 03:30 - 05:30 slot remains completely blank for O4
     ],
     "Friday": [
-      { subject: "SAS", faculty: "ARA", room: "M-301", start: "10:30", end: "11:30", type: "Lecture" },
-      { subject: "ADC", faculty: "UNF", room: "M-301", start: "11:30", end: "12:30", type: "Lecture" },
-      { subject: "ADC", faculty: "VF", room: "F-104", start: "13:15", end: "15:15", type: "Lab" }
+      { subject: "SAS", faculty: "ARA", start: "10:30", end: "11:30", type: "Lecture" },
+      { subject: "ADC", faculty: "UNF", start: "11:30", end: "12:30", type: "Lecture" },
+      { subject: "ADC", faculty: "VF", start: "13:15", end: "15:15", type: "Lab" }
     ]
   };
 
@@ -125,7 +125,7 @@
   let notifiedForNextLecture = false;
   let deferredInstallPrompt = null;
   let collapsedDays = JSON.parse(localStorage.getItem("collapsedDays") || "{}");
-  
+
   // Announcements & Admin Panel State
   let isAdminLoggedIn = false;
   let announcements = [];
@@ -250,7 +250,7 @@
       const dayNode = ELEMENTS.dayTemplate.content.cloneNode(true);
       const daySection = dayNode.querySelector(".day-card");
       daySection.setAttribute("data-day", day);
-      
+
       // Expand/Collapse header
       const header = daySection.querySelector(".day-card-header");
       const title = daySection.querySelector(".day-title");
@@ -284,10 +284,10 @@
         lectures.forEach((lec, index) => {
           const lecNode = ELEMENTS.lectureTemplate.content.cloneNode(true);
           const article = lecNode.querySelector(".lecture-item");
-          
+
           // Unique identification for DOM tracking
           article.id = `lecture-${day.toLowerCase()}-${index}`;
-          
+
           // Class mappings for specific styling
           article.classList.add(`${lec.subject.toLowerCase()}-subject`);
           if (lec.type === "Lab") {
@@ -300,7 +300,6 @@
           lecNode.querySelector(".lecture-subject").textContent = lec.subject;
           lecNode.querySelector(".lecture-type-badge").textContent = lec.type;
           lecNode.querySelector(".faculty-name").textContent = lec.faculty;
-          lecNode.querySelector(".room-number").textContent = lec.room;
 
           // Save node reference to lecture object for fast mutations
           lec.domElement = article;
@@ -332,7 +331,7 @@
     // Reset status indicators
     ELEMENTS.trackerBadge.style.display = "inline-block";
     ELEMENTS.trackerBadge.className = "tracker-badge";
-    
+
     // Check for Weekend
     if (now.getDay() === 0 || now.getDay() === 6) {
       updateStatusDisplay({
@@ -348,7 +347,7 @@
     }
 
     const todayLectures = TIMETABLE[currentDay] || [];
-    
+
     // Check if college has no classes today (unlikely for weekdays, but safe fallback)
     if (todayLectures.length === 0) {
       updateStatusDisplay({
@@ -373,7 +372,7 @@
         badge: "PRE-COLLEGE",
         badgeClass: "next",
         title: `⏰ Waiting for College`,
-        subtitle: `First class starts in ${waitTime} min (${firstLec.subject} in ${firstLec.room})`,
+        subtitle: `First class starts in ${waitTime} min (${firstLec.subject})`,
         progress: 0,
         showProgress: false
       });
@@ -393,7 +392,7 @@
         showProgress: true
       });
       highlightLectures(currentDay, null, null);
-      
+
       // Friday Celebration Check: Ends at 3:15 PM (15:15)
       // Confetti will trigger if it's Friday and within 30 minutes of college ending
       if (currentDay === "Friday" && currentMin >= 915 && currentMin < 945) {
@@ -419,7 +418,7 @@
         upcomingLec = todayLectures[i + 1] || null;
         break;
       }
-      
+
       if (currentMin < startMin) {
         // Since list is sorted, first one we see in future is the next lecture
         breakNextLec = lec;
@@ -442,7 +441,7 @@
         badge: "LIVE NOW",
         badgeClass: "live",
         title: `📚 ${activeLec.subject} (${activeLec.type})`,
-        subtitle: `Faculty: ${activeLec.faculty} • Room: ${activeLec.room} [Ends at ${formatTime12h(activeLec.end)}]`,
+        subtitle: `Faculty: ${activeLec.faculty} • Ends at ${formatTime12h(activeLec.end)}`,
         progress: percentage,
         showProgress: true,
         elapsedText: `${elapsed}m elapsed`,
@@ -450,12 +449,12 @@
       });
 
       highlightLectures(currentDay, activeLec, upcomingLec);
-      
+
       // Notification Alert: Notify 5 mins before next lecture starts
       if (upcomingLec && remaining <= 5) {
         checkNotificationAlert(upcomingLec, remaining);
       }
-      
+
       // Auto Scroll current lecture into view
       scrollLectureIntoView(activeLec);
       return;
@@ -580,7 +579,7 @@
     const grid = ELEMENTS.timetableContainer;
     const now = new Date();
     const currentDay = DAYS[now.getDay()];
-    
+
     // Determine target day for Daily View:
     // If it's a weekday, show today. If weekend, fallback to Monday.
     const isWkEnd = now.getDay() === 0 || now.getDay() === 6;
@@ -588,7 +587,7 @@
 
     if (activeView === "daily") {
       grid.classList.add("daily-active");
-      
+
       // Toggle card visibility
       const dayCards = grid.querySelectorAll(".day-card");
       dayCards.forEach(card => {
@@ -608,11 +607,11 @@
       ELEMENTS.btnWeeklyView.setAttribute("aria-selected", "false");
     } else {
       grid.classList.remove("daily-active");
-      
+
       const dayCards = grid.querySelectorAll(".day-card");
       dayCards.forEach(card => {
         card.classList.remove("today-active");
-        
+
         // Restore collapse states
         const cardDay = card.getAttribute("data-day");
         if (collapsedDays[cardDay]) {
@@ -639,14 +638,14 @@
   function updateTomorrowPreview() {
     const now = new Date();
     const todayIndex = now.getDay();
-    
+
     // Tomorrow logic (wrapping weekends)
     let tomorrowIndex = todayIndex + 1;
     if (tomorrowIndex > 6) tomorrowIndex = 0; // Wrap to Sunday
 
     const tomorrowDay = DAYS[tomorrowIndex];
     const tomorrowLectures = TIMETABLE[tomorrowDay] || [];
-    
+
     const container = ELEMENTS.previewContent;
     container.innerHTML = "";
 
@@ -673,14 +672,14 @@
     tomorrowLectures.forEach(lec => {
       const item = document.createElement("div");
       item.className = "preview-item";
-      
+
       // Subject border accent
       item.style.borderLeftColor = `var(--${lec.subject.toLowerCase()}-color)`;
-      
+
       item.innerHTML = `
         <div class="preview-item-left">
           <span class="preview-subject">${lec.subject} (${lec.type})</span>
-          <span class="preview-meta">👨‍🏫 ${lec.faculty} • 📍 Room ${lec.room}</span>
+          <span class="preview-meta">👨‍🏫 ${lec.faculty}</span>
         </div>
         <span class="preview-time">${formatTime12h(lec.start)}</span>
       `;
@@ -699,7 +698,7 @@
     const query = ELEMENTS.searchInput.value.trim().toLowerCase();
     const isSearching = query !== "";
     setPreviewVisibility(isSearching);
-    
+
     if (query === "") {
       // Clear filters
       Object.keys(TIMETABLE).forEach(day => {
@@ -729,9 +728,8 @@
 
         const subjectMatch = matchesSubjectSearch(lec.subject, query);
         const facultyMatch = matchesSearchTerm(lec.faculty, query);
-        const roomMatch = matchesSearchTerm(lec.room, query);
 
-        if (subjectMatch || facultyMatch || roomMatch) {
+        if (subjectMatch || facultyMatch) {
           itemDom.classList.remove("filtered-out");
           matchCount++;
         } else {
@@ -744,7 +742,7 @@
         dayCard.classList.add("filtered-out");
       } else {
         dayCard.classList.remove("filtered-out");
-        
+
         // Force expand card so user can see search results
         dayCard.classList.remove("collapsed");
       }
@@ -775,7 +773,7 @@
 
       const rect = target.getBoundingClientRect();
       const ripple = document.createElement("span");
-      
+
       const size = Math.max(rect.width, rect.height);
       const x = e.clientX - rect.left - size / 2;
       const y = e.clientY - rect.top - size / 2;
@@ -791,7 +789,7 @@
       if (old) old.remove();
 
       target.appendChild(ripple);
-      
+
       // Auto remove after animation completes
       setTimeout(() => ripple.remove(), 600);
     });
@@ -804,7 +802,7 @@
     const cachedTheme = localStorage.getItem("theme");
     // Default to OS Preference if no cache
     const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
-    
+
     activeTheme = cachedTheme || (prefersDark ? "dark" : "light");
 
     if (activeTheme === "dark") {
@@ -839,27 +837,27 @@
 
     const container = ELEMENTS.confettiContainer;
     container.innerHTML = "";
-    
+
     const colors = ["#ef4444", "#3b82f6", "#10b981", "#eab308", "#a855f7", "#ec4899", "#f97316"];
     const count = 75;
 
     for (let i = 0; i < count; i++) {
       const piece = document.createElement("div");
       piece.className = "confetti";
-      
+
       // Random coordinates and animations
       piece.style.left = `${Math.random() * 100}vw`;
       piece.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
       piece.style.width = `${Math.random() * 10 + 6}px`;
       piece.style.height = piece.style.width;
-      
+
       // Animation timing
       piece.style.animationDelay = `${Math.random() * 0.8}s`;
       piece.style.animationDuration = `${Math.random() * 2 + 1.5}s`;
-      
+
       // Custom rotation angle
       piece.style.transform = `rotate(${Math.random() * 360}deg)`;
-      
+
       container.appendChild(piece);
     }
 
@@ -900,7 +898,7 @@
             notificationsEnabled = true;
             ELEMENTS.notifBtn.textContent = "🔕";
             ELEMENTS.notifBtn.title = "Disable Lecture Alerts";
-            
+
             // Send test notification
             new Notification("VGEC Timetable Alerts", {
               body: "You'll be alerted 5 minutes before your lectures start!",
@@ -921,9 +919,9 @@
     // Send only if exactly 5 minutes remaining
     if (minutesRemaining === 5) {
       notifiedForNextLecture = true;
-      
+
       new Notification(`Next Class Starting Soon!`, {
-        body: `${nextLecture.subject} starts in 5 minutes in Room ${nextLecture.room} with ${nextLecture.faculty}.`,
+        body: `${nextLecture.subject} starts in 5 minutes with ${nextLecture.faculty}.`,
         icon: "icons/icon-192.png",
         vibrate: [200, 100, 200]
       });
@@ -947,7 +945,7 @@
       // Prevent automatic banner display
       e.preventDefault();
       deferredInstallPrompt = e;
-      
+
       // Expose floating action button
       ELEMENTS.installBtn.classList.remove("hidden");
     });
@@ -958,15 +956,15 @@
         alert("PWA installation is not available. This can happen if:\n1. The app is already installed.\n2. You are using the 'file://' protocol directly.\n3. Your browser/mode (like incognito) does not support installation.");
         return;
       }
-      
+
       try {
         // Trigger the browser's install prompt
         await deferredInstallPrompt.prompt();
-        
+
         // Wait for the user to respond to the prompt
         const { outcome } = await deferredInstallPrompt.userChoice;
         console.log(`User installation choice: ${outcome}`);
-        
+
         if (outcome === "accepted") {
           ELEMENTS.installBtn.classList.add("hidden");
           deferredInstallPrompt = null;
@@ -993,7 +991,7 @@
       navigator.serviceWorker.register("service-worker.js")
         .then(reg => {
           console.log("Service Worker registered successfully with scope: ", reg.scope);
-          
+
           // Check for app updates
           reg.addEventListener("updatefound", () => {
             const newWorker = reg.installing;
@@ -1018,7 +1016,7 @@
    */
   function initNetworkEvents() {
     const badge = ELEMENTS.networkStatus;
-    
+
     window.addEventListener("online", () => {
       badge.className = "network-badge online";
       badge.querySelector(".status-text").textContent = "Online";
@@ -1092,7 +1090,7 @@
     activeAnnouncements.forEach(ann => {
       const cardNode = ELEMENTS.announcementCardTemplate.content.cloneNode(true);
       const card = cardNode.querySelector(".announcement-card");
-      
+
       // Setup card type borders
       card.classList.add(ann.type);
 
@@ -1111,7 +1109,7 @@
       const annDate = new Date(ann.date);
       const annTime = new Date(ann.date + 'T00:00:00').getTime();
       const currTime = new Date(todayStr + 'T00:00:00').getTime();
-      
+
       const diffMs = annTime - currTime;
       const diffDays = Math.round(diffMs / (1000 * 60 * 60 * 24));
 
@@ -1287,7 +1285,7 @@
    */
   function importAnnouncements(file) {
     const reader = new FileReader();
-    reader.onload = function(e) {
+    reader.onload = function (e) {
       try {
         const imported = JSON.parse(e.target.result);
         if (Array.isArray(imported)) {
@@ -1316,7 +1314,7 @@
 
   function updateClockDisplay() {
     const now = new Date();
-    
+
     // Formatting: clock - HH:MM:SS AM/PM
     ELEMENTS.clock.textContent = now.toLocaleTimeString("en-IN", {
       hour12: true,
@@ -1363,7 +1361,7 @@
 
     // Search Trigger
     ELEMENTS.searchInput.addEventListener("input", filterLectures);
-    
+
     // Refresh on screen focus
     document.addEventListener("visibilitychange", () => {
       if (!document.hidden) {
