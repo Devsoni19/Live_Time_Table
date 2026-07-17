@@ -1029,6 +1029,12 @@ body {
     color: var(--text-sub);
   }
 
+  .lecture-faculty {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+
   .badge {
 
     margin-top: 12px;

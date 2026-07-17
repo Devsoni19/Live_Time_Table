@@ -1,14 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
 
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <title>VGEC Timetable - ICT Sem V O4</title>
 
-
-  <title>VGEC Timetable - ICT Sem V O4</title>
 
   <meta name="theme-color" content="#2563eb">
   <meta name="description"
@@ -18,17 +17,10 @@
   <meta property="og:title" content="VGEC Timetable - ICT Sem V O4">
   <meta property="og:description"
     content="Live progress, classroom locator, and offline schedule for VGEC B.E. Semester 5 ICT O4 Batch.">
-  <meta property="og:type" content="website">
-
-  <!-- PWA Support -->
-  <meta name="description"
-    content="A premium, production-ready Progressive Web App for VGEC ICT Semester 5 (O4 Batch) Timetable with live tracking, notifications, offline support, and dark mode.">
-
-  <!-- SEO & Social Meta Tags -->
-  <meta property="og:title" content="VGEC Timetable - ICT Sem V O4">
   <meta property="og:description"
     content="Live progress, classroom locator, and offline schedule for VGEC B.E. Semester 5 ICT O4 Batch.">
   <meta property="og:type" content="website">
+
 
   <!-- PWA Support -->
   <link rel="manifest" href="manifest.json">
@@ -37,12 +29,7 @@
   <link rel="apple-touch-icon" href="icons/icon-192.png">
 
   <!-- Stylesheets -->
-
-  <!-- Stylesheets -->
   <link rel="stylesheet" href="style.css">
-  <link rel="stylesheet" href="admin_profile.css">
-
-  <!-- Fonts -->
 
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -50,10 +37,8 @@
   <link
     href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Poppins:wght@300;400;500;600;700&display=swap"
     rel="stylesheet">
-  <link
-    href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Poppins:wght@300;400;500;600;700&display=swap"
-    rel="stylesheet">
 </head>
+
 
 <body>
 
@@ -93,6 +78,7 @@
         </div>
       </div>
 
+
       <div class="header-right">
         <!-- Online/Offline Indicator -->
         <div id="networkStatus" class="network-badge online" title="Network Connection Status">
@@ -100,22 +86,29 @@
           <span class="status-text">Online</span>
         </div>
 
+
         <!-- Toggle Notifications -->
         <button id="notifBtn" class="glass-btn icon-btn" title="Enable Lecture Notifications"
           aria-label="Toggle notifications">
-          🔔
-        </button>
+          <button id="notifBtn" class="glass-btn icon-btn" title="Enable Lecture Notifications"
+            aria-label="Toggle notifications">
+            🔔
+          </button>
 
-        <!-- Theme Toggle -->
-        <button id="themeBtn" class="glass-btn icon-btn" title="Toggle Theme (Shortcut: T)"
-          aria-label="Toggle dark mode">
-          🌙
-        </button>
 
-        <!-- Admin Access -->
-        <button id="adminBtn" class="glass-btn icon-btn" title="Admin Portal" aria-label="Open admin portal">
-          🔒
-        </button>
+          <!-- Theme Toggle -->
+          <button id="themeBtn" class="glass-btn icon-btn" title="Toggle Theme (Shortcut: T)"
+            aria-label="Toggle dark mode">
+            <button id="themeBtn" class="glass-btn icon-btn" title="Toggle Theme (Shortcut: T)"
+              aria-label="Toggle dark mode">
+              🌙
+            </button>
+
+
+            <!-- Admin Access -->
+            <button id="adminBtn" class="glass-btn icon-btn" title="Admin Portal" aria-label="Open admin portal">
+              🔒
+            </button>
       </div>
     </header>
 
@@ -124,6 +117,7 @@
     <!-- ========================================== -->
     <section class="glass status-panel" id="statusPanel" aria-labelledby="statusPanelTitle">
       <h2 id="statusPanelTitle" class="sr-only">Live Schedule Status</h2>
+
 
       <div class="status-meta">
         <div class="status-meta-item">
@@ -151,10 +145,14 @@
           <span id="progressPercent" class="progress-percentage">0%</span>
         </div>
 
+
         <p id="liveSubtitle" class="tracker-subtitle">Please wait, updating timetable data.</p>
+
 
         <!-- Live Lecture Progress Bar -->
         <div class="progress-bar-container" id="progressBarContainer">
+          <div id="progressBar" class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0"
+            aria-valuemax="100" aria-label="Current lecture progress"></div>
           <div id="progressBar" class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0"
             aria-valuemax="100" aria-label="Current lecture progress"></div>
         </div>
@@ -371,19 +369,12 @@
           <h3 class="day-title">Monday</h3>
           <button class="collapse-btn" aria-label="Toggle day visibility">▼</button>
         </header>
-        <section class="glass day-card" data-day="">
-          <header class="day-card-header">
-            <h3 class="day-title">Monday</h3>
-            <button class="collapse-btn" aria-label="Toggle day visibility">▼</button>
-          </header>
-          <div class="lecture-list">
-            <!-- Lecture articles will be injected here -->
-            <!-- Lecture articles will be injected here -->
-          </div>
-        </section>
+        <div class="lecture-list">
+          <!-- Lecture articles will be injected here -->
+        </div>
+      </section>
     </template>
 
-    <!-- Template for Lecture Item -->
     <!-- Template for Lecture Item -->
     <template id="lectureTemplate">
       <article class="lecture-item">
@@ -402,11 +393,11 @@
             <span class="lecture-faculty" title="Faculty Initials">
               <span class="meta-icon">👨‍🏫</span>
               <span class="faculty-name">ABC</span>
-            </span>
-            <span class="lecture-room" title="Room Number">
-              <span class="meta-icon">📍</span>
-              <span class="room-number">M-301</span>
-            </span>
+              <!-- </span> -->
+              <!-- <span class="lecture-room" title="Room Number"> -->
+              <!-- <span class="meta-icon">📍</span> -->
+              <!-- <span class="room-number">M-301</span> -->
+              <!-- </span> -->
           </div>
         </div>
       </article>
@@ -518,7 +509,6 @@
           </template>
 
           <!-- ========================================== -->
-          <!-- ========================================== -->
           <!-- Scripts -->
           <!-- ========================================== -->
           <!-- JS Confetti Vanilla Fallback -->
@@ -526,5 +516,6 @@
 
           <script src="app.js"></script>
 </body>
+
 
 </html>
