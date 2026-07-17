@@ -2,9 +2,13 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/12.16.0/fireba
 
 import {
   getFirestore,
+  query,
+  orderBy,
   collection,
+  setDoc,
   addDoc,
   getDocs,
+  updateDoc,
   deleteDoc,
   doc,
   onSnapshot,
@@ -26,11 +30,15 @@ const db = getFirestore(app);
 
 export {
   db,
+  query,
+  orderBy,
   collection,
   addDoc,
   getDocs,
+  setDoc,
   deleteDoc,
   doc,
+  updateDoc,
   onSnapshot,
   serverTimestamp
 };

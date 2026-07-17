@@ -15,12 +15,18 @@
 import {
   db,
   collection,
+  query,
+  orderBy,
   addDoc,
+  getDocs,
+  setDoc,
   deleteDoc,
   doc,
   onSnapshot,
   serverTimestamp
 } from "./firebase.js";
+
+import timetableService from "./timetableService.js";
 
 (function () {
   'use strict';
@@ -93,10 +99,16 @@ import {
     MOPEC: ["MOPEC"]
   };
 
+
+
+
   // ==========================================
   // 2. Timetable Data (O4 Batch Only)
   // ==========================================
-  const TIMETABLE = {
+
+
+
+  /*const TIMETABLE = {
     "Monday": [
       { subject: "CN", faculty: "JKN", start: "10:30", end: "11:30", type: "Lecture" },
       { subject: "PDS", faculty: "KBC", start: "11:30", end: "12:30", type: "Lecture" },
@@ -126,7 +138,75 @@ import {
       { subject: "ADC", faculty: "UNF", start: "11:30", end: "12:30", type: "Lecture" },
       { subject: "ADC", faculty: "VF", start: "13:15", end: "15:15", type: "Lab" }
     ]
-  };
+  };*/
+
+
+  let TIMETABLE = {}; // Will be populated from Firestore
+
+  // async function loadTimetable() {
+
+  //   const days = [
+  //     "Monday",
+  //     "Tuesday",
+  //     "Wednesday",
+  //     "Thursday",
+  //     "Friday"
+  //   ];
+
+  //   TIMETABLE = {};
+
+  //   for (const day of days) {
+
+  //     const lectures = [];
+
+  //     const snapshot = await getDocs(
+  //       query(
+  //         collection(db, "timetable", day, "lectures"),
+  //         orderBy("order")
+  //       )
+  //     );
+
+  //     snapshot.forEach(docSnap => {
+
+  //       lectures.push({
+  //         id: docSnap.id,
+  //         ...docSnap.data()
+  //       });
+
+  //     });
+
+  //     TIMETABLE[day] = lectures;
+
+  //   }
+
+  // }
+
+  // async function uploadTimetable() {
+
+  //   try {
+
+  //     for (const day in TIMETABLE) {
+
+  //       await setDoc(
+  //         doc(db, "timetable", day),
+  //         {
+  //           lectures: TIMETABLE[day]
+  //         }
+  //       );
+
+  //     }
+
+  //     alert("Timetable uploaded successfully!");
+
+  //   } catch (err) {
+
+  //     console.error(err);
+
+  //     alert(err.message);
+
+  //   }
+
+  // }
 
   // State flags
   let activeTheme = "light";
@@ -1387,11 +1467,16 @@ import {
   /**
    * Main setup sequence
    */
-  function initializeApp() {
+  async function initializeApp() {
     // 1. Sync Theme System
     initTheme();
 
+    // await uploadTimetable();
+
+
     // 2. Render base layout
+    TIMETABLE = await timetableService.getAllTimetable();
+
     buildTimetable();
 
     // 3. Render initial status info
@@ -1428,11 +1513,14 @@ import {
     }, 450);
 
     console.log(`VGEC Timetable PWA v${APP_VERSION} initialized successfully.`);
+
   }
 
   // Start app!
   if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", initializeApp);
+    document.addEventListener("DOMContentLoaded", async () => {
+      await initializeApp();
+    });
   } else {
     initializeApp();
   }
