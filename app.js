@@ -129,29 +129,29 @@
   // Announcements & Admin Panel State
   let isAdminLoggedIn = false;
   let announcements = [];
-  const DEFAULT_ANNOUNCEMENTS = [
-    {
-      id: "ann-default-1",
-      type: "exam-mid",
-      title: "Mid-Term Examinations",
-      date: "2026-09-07",
-      desc: "Mid-semester internal examinations cover Units 1-3. Detailed timetable is available on the departmental notice board."
-    },
-    {
-      id: "ann-default-2",
-      type: "assignment",
-      title: "Python for Data Science Assignment 2",
-      date: "2026-08-14",
-      desc: "Submit Jupyter notebooks containing solutions to exercises 5-8 on Google Classroom."
-    },
-    {
-      id: "ann-default-3",
-      type: "exam-final",
-      title: "GTU Winter 2026 Theory Exam",
-      date: "2026-11-20",
-      desc: "Final external university exams are expected to commence tentatively in late November. Keep checking official GTU portal."
-    }
-  ];
+  // const DEFAULT_ANNOUNCEMENTS = [
+  //   {
+  //     id: "ann-default-1",
+  //     type: "exam-mid",
+  //     title: "Mid-Term Examinations",
+  //     date: "2026-09-07",
+  //     desc: "Mid-semester internal examinations cover Units 1-3. Detailed timetable is available on the departmental notice board."
+  //   },
+  //   {
+  //     id: "ann-default-2",
+  //     type: "assignment",
+  //     title: "Python for Data Science Assignment 2",
+  //     date: "2026-08-14",
+  //     desc: "Submit Jupyter notebooks containing solutions to exercises 5-8 on Google Classroom."
+  //   },
+  //   {
+  //     id: "ann-default-3",
+  //     type: "exam-final",
+  //     title: "GTU Winter 2026 Theory Exam",
+  //     date: "2026-11-20",
+  //     desc: "Final external university exams are expected to commence tentatively in late November. Keep checking official GTU portal."
+  //   }
+  // ];
 
   // ==========================================
   // 3. Time Utilities
