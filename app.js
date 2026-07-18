@@ -23,7 +23,13 @@ import {
   deleteDoc,
   doc,
   onSnapshot,
-  serverTimestamp
+  serverTimestamp,
+
+  auth,
+  provider,
+  signInWithPopup,
+  signOut,
+  onAuthStateChanged
 } from "./firebase.js";
 
 import timetableService from "./timetableService.js";
@@ -68,8 +74,6 @@ import timetableService from "./timetableService.js";
     modalCloseBtn: document.getElementById("modalCloseBtn"),
     adminLoginView: document.getElementById("adminLoginView"),
     adminDashboardView: document.getElementById("adminDashboardView"),
-    loginForm: document.getElementById("loginForm"),
-    adminPassword: document.getElementById("adminPassword"),
     announcementForm: document.getElementById("announcementForm"),
     announcementType: document.getElementById("announcementType"),
     announcementDate: document.getElementById("announcementDate"),
@@ -90,6 +94,7 @@ import timetableService from "./timetableService.js";
 
   const DAYS = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
   const APP_VERSION = "1.1.0";
+  const ADMIN_EMAIL = "sdev.19072003@gmail.com";
   const SUBJECT_ALIASES = {
     CN: ["Computer Networks"],
     PDS: ["Python for Data Science"],
@@ -209,6 +214,7 @@ import timetableService from "./timetableService.js";
   // }
 
   // State flags
+
   let activeTheme = "light";
   let activeView = "daily"; // 'daily' or 'weekly'
   let notificationsEnabled = false;
@@ -1305,8 +1311,6 @@ import timetableService from "./timetableService.js";
     } else {
       ELEMENTS.adminLoginView.classList.remove("hidden");
       ELEMENTS.adminDashboardView.classList.add("hidden");
-      ELEMENTS.adminPassword.value = "";
-      ELEMENTS.adminPassword.focus();
     }
   }
 
@@ -1314,24 +1318,13 @@ import timetableService from "./timetableService.js";
     ELEMENTS.adminModal.classList.add("hidden");
   }
 
-  function adminLogin(password) {
-    if (password === "adminvgec") {
-      isAdminLoggedIn = true;
-      ELEMENTS.adminLoginView.classList.add("hidden");
-      ELEMENTS.adminDashboardView.classList.remove("hidden");
-      renderAdminAnnouncementsList();
-    } else {
-      alert("Incorrect password! Use the official administrator credentials.");
-      ELEMENTS.adminPassword.value = "";
-      ELEMENTS.adminPassword.focus();
-    }
-  }
 
-  function adminLogout() {
+  async function adminLogout() {
+    await signOut(auth);
     isAdminLoggedIn = false;
+    closeAdminModal();
     ELEMENTS.adminLoginView.classList.remove("hidden");
     ELEMENTS.adminDashboardView.classList.add("hidden");
-    ELEMENTS.adminPassword.value = "";
   }
 
   /**
@@ -1437,12 +1430,36 @@ import timetableService from "./timetableService.js";
     });
 
     // Admin Panel Listeners
-    ELEMENTS.adminBtn.addEventListener("click", openAdminModal);
-    ELEMENTS.modalCloseBtn.addEventListener("click", closeAdminModal);
-    ELEMENTS.loginForm.addEventListener("submit", (e) => {
-      e.preventDefault();
-      adminLogin(ELEMENTS.adminPassword.value);
+    ELEMENTS.adminBtn.addEventListener("click", async () => {
+
+      if (isAdminLoggedIn) {
+
+        openAdminModal();
+
+        return;
+      }
+      ELEMENTS.adminBtn.disabled = true;
+
+
+      try {
+
+        await signInWithPopup(auth, provider);
+
+      } catch (err) {
+
+        console.error(err);
+        alert(err.message);
+      } finally {
+
+        ELEMENTS.adminBtn.disabled = false;
+      }
+
     });
+
+
+
+    ELEMENTS.modalCloseBtn.addEventListener("click", closeAdminModal);
+
     ELEMENTS.btnAdminLogout.addEventListener("click", adminLogout);
     ELEMENTS.announcementForm.addEventListener("submit", (e) => {
       e.preventDefault();
@@ -1468,6 +1485,35 @@ import timetableService from "./timetableService.js";
    * Main setup sequence
    */
   async function initializeApp() {
+
+    onAuthStateChanged(auth, (user) => {
+
+      if (!user) {
+
+        isAdminLoggedIn = false;
+        closeAdminModal();
+
+        return;
+
+      }
+
+      if (user.email === ADMIN_EMAIL) {
+
+        isAdminLoggedIn = true;
+
+        // openAdminModal();
+
+        console.log("Admin Logged In");
+
+      } else {
+
+        alert("This Google account is not an administrator.");
+
+        signOut(auth);
+
+      }
+
+    });
     // 1. Sync Theme System
     initTheme();
 

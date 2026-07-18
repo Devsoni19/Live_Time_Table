@@ -1936,3 +1936,7 @@ body.dark .admin-list-item {
     display: none !important;
   }
 }
+
+#adminLoginView {
+  display: none;
+}
