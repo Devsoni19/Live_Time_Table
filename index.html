@@ -309,31 +309,25 @@
   <!-- ========================================== -->
   <div id="adminModal" class="modal-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
     <div class="glass modal-content">
-      <button class="modal-close-btn" id="modalCloseBtn" aria-label="Close modal">&times;</button>
 
       <!-- Login View -->
       <!-- Admin Profile Picture and Info -->
 
       <div class="admin-profile">
-
         <img id="adminPhoto" class="admin-photo" src="" alt="Profile">
-
         <div class="admin-info">
-
           <h3 id="adminName">Loading...</h3>
-
           <p id="adminEmail">Loading...</p>
-
         </div>
-
       </div>
-      <div id="adminLoginView" class="admin-view">
+      <button class="modal-close-btn" id="modalCloseBtn" aria-label="Close modal">&times;</button>
 
+      <div id="adminLoginView" class="admin-view">
       </div>
 
       <!-- Dashboard View -->
       <div id="adminDashboardView" class="admin-view hidden">
-        <h3>⚙ Admin Dashboard</h3>
+        <h3>Admin Dashboard</h3>
         <p class="modal-desc">Create or manage announcements. Expired notices are auto-hidden.</p>
 
         <form id="announcementForm" onsubmit="return false;" class="admin-form">
