@@ -97,6 +97,12 @@ import timetableService from "./timetableService.js";
     adminName: document.getElementById("adminName"),
     adminEmail: document.getElementById("adminEmail"),
 
+    headerAdminPhoto:
+      document.getElementById("headerAdminPhoto"),
+
+    adminIcon:
+      document.getElementById("adminIcon"),
+
     // schedule preview elements
 
     previewTitle: document.getElementById("previewTitle"),
@@ -1595,6 +1601,10 @@ import timetableService from "./timetableService.js";
         isAdminLoggedIn = false;
         closeAdminModal();
 
+        ELEMENTS.headerAdminPhoto.classList.add("hidden");
+
+        ELEMENTS.adminIcon.classList.remove("hidden");
+
         return;
 
       }
@@ -1613,6 +1623,14 @@ import timetableService from "./timetableService.js";
 
         ELEMENTS.adminEmail.textContent =
           user.email;
+
+        // Header profile picture
+        ELEMENTS.headerAdminPhoto.src =
+          user.photoURL || "icons/default-user.png";
+
+        ELEMENTS.headerAdminPhoto.classList.remove("hidden");
+
+        ELEMENTS.adminIcon.classList.add("hidden");
 
 
         // openAdminModal();
