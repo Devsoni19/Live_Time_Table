@@ -312,33 +312,23 @@
       <button class="modal-close-btn" id="modalCloseBtn" aria-label="Close modal">&times;</button>
 
       <!-- Login View -->
-      <div id="adminLoginView" class="admin-view">
+      <!-- Admin Profile Picture and Info -->
 
-        <!-- Admin Profile Picture and Info -->
+      <div class="admin-profile">
 
-        <div class="admin-profile">
+        <img id="adminPhoto" class="admin-photo" src="" alt="Profile">
 
-          <img id="adminPhoto" class="admin-photo" src="" alt="Profile">
+        <div class="admin-info">
 
-          <div class="admin-info">
+          <h3 id="adminName">Loading...</h3>
 
-            <h3 id="adminName">Loading...</h3>
-
-            <p id="adminEmail">Loading...</p>
-
-          </div>
+          <p id="adminEmail">Loading...</p>
 
         </div>
 
-        <p class="modal-desc">Enter the administrator password to manage announcements.</p>
-        <form id="loginForm" onsubmit="return false;">
-          <div class="input-group">
-            <label for="adminPassword">Password</label>
-            <input type="password" id="adminPassword" placeholder="Enter password..." required
-              autocomplete="current-password">
-          </div>
-          <button type="submit" id="btnLoginSubmit" class="glass-btn primary-btn">Login</button>
-        </form>
+      </div>
+      <div id="adminLoginView" class="admin-view">
+
       </div>
 
       <!-- Dashboard View -->
