@@ -24,6 +24,7 @@
 
   <!-- Stylesheets -->
   <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="admin_profile.css">
 
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -181,7 +182,10 @@
     <!-- ========================================== -->
     <section class="glass preview-panel" id="previewPanel">
       <div class="preview-header">
-        <h4>📋 Schedule Preview</h4>
+        <div class="preview-header">
+          <h2 id="previewTitle">📅 Today's Schedule</h2>
+          <h4 id="previewDay"> Monday </h4>
+        </div>
       </div>
       <div class="preview-content" id="previewContent">
         <!-- Will be populated dynamically by JS -->
@@ -309,7 +313,23 @@
 
       <!-- Login View -->
       <div id="adminLoginView" class="admin-view">
-        <h3 id="modalTitle">🔑 Admin Login</h3>
+
+        <!-- Admin Profile Picture and Info -->
+
+        <div class="admin-profile">
+
+          <img id="adminPhoto" class="admin-photo" src="" alt="Profile">
+
+          <div class="admin-info">
+
+            <h3 id="adminName">Loading...</h3>
+
+            <p id="adminEmail">Loading...</p>
+
+          </div>
+
+        </div>
+
         <p class="modal-desc">Enter the administrator password to manage announcements.</p>
         <form id="loginForm" onsubmit="return false;">
           <div class="input-group">
@@ -400,6 +420,7 @@
 
   <script type="module" src="app.js"></script>
   <script type="module" src="firebase.js"></script>
+  <!-- <script type="module" src="fix.js"></script> -->
   <!-- <script type="module" src="migrateTimetable.js"></script> -->
 </body>
 

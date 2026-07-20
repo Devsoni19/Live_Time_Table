@@ -89,8 +89,25 @@ import timetableService from "./timetableService.js";
     dayTemplate: document.getElementById("dayTemplate"),
     lectureTemplate: document.getElementById("lectureTemplate"),
     announcementCardTemplate: document.getElementById("announcementCardTemplate"),
-    confettiContainer: document.getElementById("confettiContainer")
+    confettiContainer: document.getElementById("confettiContainer"),
+
+    // Admin Profile Elements
+
+    adminPhoto: document.getElementById("adminPhoto"),
+    adminName: document.getElementById("adminName"),
+    adminEmail: document.getElementById("adminEmail"),
+
+    // schedule preview elements
+
+    previewTitle: document.getElementById("previewTitle"),
+    previewDay: document.getElementById("previewDay")
+
   };
+  console.log(ELEMENTS.adminPhoto);
+  console.log(ELEMENTS.adminName);
+  console.log(ELEMENTS.adminEmail);
+  console.log(ELEMENTS.previewTitle);
+  console.log(ELEMENTS.previewDay);
 
   const DAYS = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
   const APP_VERSION = "1.1.0";
@@ -148,43 +165,43 @@ import timetableService from "./timetableService.js";
 
   let TIMETABLE = {}; // Will be populated from Firestore
 
-  // async function loadTimetable() {
+  async function loadTimetable() {
 
-  //   const days = [
-  //     "Monday",
-  //     "Tuesday",
-  //     "Wednesday",
-  //     "Thursday",
-  //     "Friday"
-  //   ];
+    const days = [
+      "Monday",
+      "Tuesday",
+      "Wednesday",
+      "Thursday",
+      "Friday"
+    ];
 
-  //   TIMETABLE = {};
+    TIMETABLE = {};
 
-  //   for (const day of days) {
+    for (const day of days) {
 
-  //     const lectures = [];
+      const lectures = [];
 
-  //     const snapshot = await getDocs(
-  //       query(
-  //         collection(db, "timetable", day, "lectures"),
-  //         orderBy("order")
-  //       )
-  //     );
+      const snapshot = await getDocs(
+        query(
+          collection(db, "timetable", day, "lectures"),
+          orderBy("order")
+        )
+      );
 
-  //     snapshot.forEach(docSnap => {
+      snapshot.forEach(docSnap => {
 
-  //       lectures.push({
-  //         id: docSnap.id,
-  //         ...docSnap.data()
-  //       });
+        lectures.push({
+          id: docSnap.id,
+          ...docSnap.data()
+        });
 
-  //     });
+      });
 
-  //     TIMETABLE[day] = lectures;
+      TIMETABLE[day] = lectures;
 
-  //   }
+    }
 
-  // }
+  }
 
   // async function uploadTimetable() {
 
@@ -348,10 +365,10 @@ import timetableService from "./timetableService.js";
         const emptyState = document.createElement("div");
         emptyState.className = "empty-day-state";
         emptyState.innerHTML = `
-          <span class="empty-icon">☕</span>
-          <h4>No Scheduled Classes</h4>
-          <p>Enjoy your free day!</p>
-        `;
+            <span class="empty-icon">☕</span>
+            <h4>No Scheduled Classes</h4>
+            <p>Enjoy your free day!</p>
+          `;
         lectureList.appendChild(emptyState);
       } else {
         lectures.forEach((lec, index) => {
@@ -707,46 +724,123 @@ import timetableService from "./timetableService.js";
 
   /**
    * Generates tomorrow preview card summary
-   */
+  */
   function updateTomorrowPreview() {
+
     const now = new Date();
     const todayIndex = now.getDay();
+    const currentMin = currentMinutes();
 
-    // Tomorrow logic (wrapping weekends)
-    let tomorrowIndex = todayIndex + 1;
-    if (tomorrowIndex > 6) tomorrowIndex = 0; // Wrap to Sunday
+    let previewDayIndex = todayIndex;
+    let previewTitle = "today";
 
-    const tomorrowDay = DAYS[tomorrowIndex];
-    const tomorrowLectures = TIMETABLE[tomorrowDay] || [];
+    // Weekend -> show Monday
+    if (todayIndex === 0 || todayIndex === 6) {
+      previewDayIndex = 1;
+    } else {
+
+      const todayDay = DAYS[todayIndex];
+      const todayLectures = TIMETABLE[todayDay] || [];
+
+      // After today's last lecture, switch to tomorrow
+      if (todayLectures.length > 0) {
+
+        const lastLecture =
+          todayLectures[todayLectures.length - 1];
+
+        if (currentMin >= toMinutes(lastLecture.end)) {
+
+          previewTitle = "tomorrow";
+
+          previewDayIndex++;
+
+          if (previewDayIndex > 5) {
+            previewDayIndex = 1; // Friday -> Monday
+          }
+        }
+
+      }
+
+    }
+
+
+
+    // Weekend
+    if (todayIndex === 0 || todayIndex === 6) {
+      previewTitle = "next";
+    }
+
+    // Current day's lectures
+    let previewLectures = TIMETABLE[DAYS[previewDayIndex]] || [];
+
+    // During today -> show remaining lectures only
+    if (previewDayIndex === todayIndex && todayIndex >= 1 && todayIndex <= 5) {
+
+      previewLectures = previewLectures.filter(
+        lec => toMinutes(lec.end) > currentMin
+      );
+
+      // Nothing left today? Switch to tomorrow
+      if (previewLectures.length === 0) {
+
+        previewTitle = "tomorrow";
+
+        previewDayIndex++;
+
+        if (previewDayIndex > 5) {
+          previewDayIndex = 1;
+        }
+
+        previewLectures = TIMETABLE[DAYS[previewDayIndex]] || [];
+      }
+    }
+
+
+
+
+
+    const previewDay = DAYS[previewDayIndex];
+
+    if (previewTitle === "today") {
+
+      ELEMENTS.previewTitle.textContent = "📅 Today's Schedule";
+
+    } else if (previewTitle === "tomorrow") {
+
+      ELEMENTS.previewTitle.textContent = "🌅 Tomorrow's Schedule";
+
+    } else {
+
+      ELEMENTS.previewTitle.textContent = `📅 ${previewDay}'s Schedule`;
+
+    }
+
+    ELEMENTS.previewDay.textContent = previewDay;
+
+
+
+
+
+
 
     const container = ELEMENTS.previewContent;
     container.innerHTML = "";
 
-    const isWkEnd = tomorrowIndex === 0 || tomorrowIndex === 6;
+    if (previewLectures.length === 0) {
 
-    if (isWkEnd) {
       container.innerHTML = `
-        <div class="empty-day-state" style="padding: 10px;">
-          <p>💤 Tomorrow is the weekend. Rest up!</p>
+        <div class="empty-day-state">
+          <p>No lectures available.</p>
         </div>
       `;
+
       return;
     }
 
-    if (tomorrowLectures.length === 0) {
-      container.innerHTML = `
-        <div class="empty-day-state" style="padding: 10px;">
-          <p>🌴 No classes scheduled for tomorrow.</p>
-        </div>
-      `;
-      return;
-    }
+    previewLectures.forEach(lec => {
 
-    tomorrowLectures.forEach(lec => {
       const item = document.createElement("div");
       item.className = "preview-item";
-
-      // Subject border accent
       item.style.borderLeftColor = `var(--${lec.subject.toLowerCase()}-color)`;
 
       item.innerHTML = `
@@ -756,8 +850,11 @@ import timetableService from "./timetableService.js";
         </div>
         <span class="preview-time">${formatTime12h(lec.start)}</span>
       `;
+
       container.appendChild(item);
+
     });
+
   }
 
   // ==========================================
@@ -1239,12 +1336,12 @@ import timetableService from "./timetableService.js";
       });
 
       item.innerHTML = `
-        <div class="admin-item-title-box">
-          <span class="admin-item-title">${ann.title}</span>
-          <span class="admin-item-date">(${formattedDate})</span>
-        </div>
-        <button class="delete-btn" data-id="${ann.id}" title="Delete Announcement">🗑</button>
-      `;
+          <div class="admin-item-title-box">
+            <span class="admin-item-title">${ann.title}</span>
+            <span class="admin-item-date">(${formattedDate})</span>
+          </div>
+          <button class="delete-btn" data-id="${ann.id}" title="Delete Announcement">🗑</button>
+        `;
 
       // Attach delete click
       item.querySelector(".delete-btn").addEventListener("click", (e) => {
@@ -1488,6 +1585,11 @@ import timetableService from "./timetableService.js";
 
     onAuthStateChanged(auth, (user) => {
 
+      console.log("User object:", user);
+      console.log("Display Name:", user?.displayName);
+      console.log("Email:", user?.email);
+      console.log("Photo URL:", user?.photoURL);
+
       if (!user) {
 
         isAdminLoggedIn = false;
@@ -1501,9 +1603,26 @@ import timetableService from "./timetableService.js";
 
         isAdminLoggedIn = true;
 
+        ELEMENTS.adminPhoto.src = user.photoURL;
+
+        ELEMENTS.adminPhoto.src =
+          user.photoURL || "icons/default-user.png";
+
+        ELEMENTS.adminName.textContent =
+          user.displayName || "Administrator";
+
+        ELEMENTS.adminEmail.textContent =
+          user.email;
+
+
         // openAdminModal();
 
         console.log("Admin Logged In");
+        console.log(`User: ${user.displayName} (${user.email})`);
+        console.log(user);
+        console.log(user.displayName);
+        console.log(user.email);
+        console.log(user.photoURL);
 
       } else {
 
@@ -1548,6 +1667,7 @@ import timetableService from "./timetableService.js";
     setInterval(() => {
       updateClockDisplay();
       trackLiveSchedule();
+      updateTomorrowPreview();
     }, 1000);
 
     // Refresh tomorrow's view every hour
