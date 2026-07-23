@@ -10,7 +10,65 @@
   height: 56px;
   border-radius: 50%;
   object-fit: cover;
-  border: 2px solid var(--primary-color);
+
+  /* Border */
+  border: 2px solid rgba(255, 255, 255, 0.35);
+
+  /* Background for transparent images */
+  background: linear-gradient(135deg,
+      rgba(255, 255, 255, 0.15),
+      rgba(255, 255, 255, 0.05));
+
+  /* Multiple Shadows */
+  box-shadow:
+    0 0 0 3px rgba(255, 255, 255, .08),
+    0 10px 30px rgba(0, 0, 0, .18),
+    inset 0 1px 1px rgba(255, 255, 255, .35);
+
+  /* Smooth Animations */
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease,
+    border-color 0.25s ease,
+    filter 0.25s ease;
+
+  cursor: pointer;
+}
+
+.admin-photo:hover {
+  transform: scale(1.08);
+  filter: brightness(130%);
+  box-shadow: 0 0 0 3px rgba(255, 255, 255, .08), 0 10px 30px rgba(0, 0, 0, .18), inset 0 1px 1px rgba(255, 255, 255, .35);
+  -webkit-filter: brightness(130%);
+}
+
+.admin-photo:active {
+  transform: scale(0.96);
+}
+
+.admin-photo:focus-visible {
+  outline: none;
+  box-shadow:
+    0 0 0 3px rgba(var(--primary-rgb), 0.45),
+    0 8px 20px rgba(0, 0, 0, 0.18);
+}
+
+.admin-photo-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.admin-photo-wrapper::after {
+  content: "";
+  position: absolute;
+  top: 4px;
+  left: 8px;
+  width: 40%;
+  height: 22%;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.35);
+  filter: blur(3px);
+  pointer-events: none;
 }
 
 .admin-info h3 {
@@ -30,5 +88,5 @@
   height: 40px;
   border-radius: 50%;
   object-fit: cover;
-  shadow: 0 0 4px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 0 4px rgba(0, 0, 0, 0.2);
 }
