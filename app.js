@@ -32,6 +32,8 @@ import {
   onAuthStateChanged
 } from "./firebase.js";
 
+// console.log("app.js loaded", performance.now());
+
 import timetableService from "./timetableService.js";
 
 (function () {
@@ -109,11 +111,11 @@ import timetableService from "./timetableService.js";
     previewDay: document.getElementById("previewDay")
 
   };
-  console.log(ELEMENTS.adminPhoto);
-  console.log(ELEMENTS.adminName);
-  console.log(ELEMENTS.adminEmail);
-  console.log(ELEMENTS.previewTitle);
-  console.log(ELEMENTS.previewDay);
+  // console.log(ELEMENTS.adminPhoto);
+  // console.log(ELEMENTS.adminName);
+  // console.log(ELEMENTS.adminEmail);
+  // console.log(ELEMENTS.previewTitle);
+  // console.log(ELEMENTS.previewDay);
 
   const DAYS = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
   const APP_VERSION = "1.1.0";
@@ -171,43 +173,43 @@ import timetableService from "./timetableService.js";
 
   let TIMETABLE = {}; // Will be populated from Firestore
 
-  async function loadTimetable() {
+  // async function loadTimetable() {
 
-    const days = [
-      "Monday",
-      "Tuesday",
-      "Wednesday",
-      "Thursday",
-      "Friday"
-    ];
+  //   const days = [
+  //     "Monday",
+  //     "Tuesday",
+  //     "Wednesday",
+  //     "Thursday",
+  //     "Friday"
+  //   ];
 
-    TIMETABLE = {};
+  //   TIMETABLE = {};
 
-    for (const day of days) {
+  //   for (const day of days) {
 
-      const lectures = [];
+  //     const lectures = [];
 
-      const snapshot = await getDocs(
-        query(
-          collection(db, "timetable", day, "lectures"),
-          orderBy("order")
-        )
-      );
+  //     const snapshot = await getDocs(
+  //       query(
+  //         collection(db, "timetable", day, "lectures"),
+  //         orderBy("order")
+  //       )
+  //     );
 
-      snapshot.forEach(docSnap => {
+  //     snapshot.forEach(docSnap => {
 
-        lectures.push({
-          id: docSnap.id,
-          ...docSnap.data()
-        });
+  //       lectures.push({
+  //         id: docSnap.id,
+  //         ...docSnap.data()
+  //       });
 
-      });
+  //     });
 
-      TIMETABLE[day] = lectures;
+  //     TIMETABLE[day] = lectures;
 
-    }
+  //   }
 
-  }
+  // }
 
   // async function uploadTimetable() {
 
@@ -1139,7 +1141,7 @@ import timetableService from "./timetableService.js";
 
         // Wait for the user to respond to the prompt
         const { outcome } = await deferredInstallPrompt.userChoice;
-        console.log(`User installation choice: ${outcome}`);
+        // console.log(`User installation choice: ${outcome}`);
 
         if (outcome === "accepted") {
           ELEMENTS.installBtn.classList.add("hidden");
@@ -1153,7 +1155,7 @@ import timetableService from "./timetableService.js";
 
     window.addEventListener("appinstalled", () => {
       ELEMENTS.installBtn.classList.add("hidden");
-      console.log("VGEC Timetable added to home screen.");
+      // console.log("VGEC Timetable added to home screen.");
     });
   }
 
@@ -1166,7 +1168,7 @@ import timetableService from "./timetableService.js";
     window.addEventListener("load", () => {
       navigator.serviceWorker.register("service-worker.js")
         .then(reg => {
-          console.log("Service Worker registered successfully with scope: ", reg.scope);
+          // console.log("Service Worker registered successfully with scope: ", reg.scope);
 
           // Check for app updates
           reg.addEventListener("updatefound", () => {
@@ -1588,13 +1590,14 @@ import timetableService from "./timetableService.js";
    * Main setup sequence
    */
   async function initializeApp() {
+    // console.log("initializeApp started", performance.now());
 
     onAuthStateChanged(auth, (user) => {
 
-      console.log("User object:", user);
-      console.log("Display Name:", user?.displayName);
-      console.log("Email:", user?.email);
-      console.log("Photo URL:", user?.photoURL);
+      // console.log("User object:", user);
+      // console.log("Display Name:", user?.displayName);
+      // console.log("Email:", user?.email);
+      // console.log("Photo URL:", user?.photoURL);
 
       if (!user) {
 
@@ -1635,12 +1638,12 @@ import timetableService from "./timetableService.js";
 
         // openAdminModal();
 
-        console.log("Admin Logged In");
-        console.log(`User: ${user.displayName} (${user.email})`);
-        console.log(user);
-        console.log(user.displayName);
-        console.log(user.email);
-        console.log(user.photoURL);
+        // console.log("Admin Logged In");
+        // console.log(`User: ${user.displayName} (${user.email})`);
+        // console.log(user);
+        // console.log(user.displayName);
+        // console.log(user.email);
+        // console.log(user.photoURL);
 
       } else {
 
@@ -1658,9 +1661,24 @@ import timetableService from "./timetableService.js";
 
 
     // 2. Render base layout
+    // Hide loading screen immediately
+    setTimeout(() => {
+      ELEMENTS.loadingScreen.classList.add("fade-out");
+      // console.log("Loading screen hidden", performance.now());
+    }, 600);
+
+    console.time("Firestore");
+
     TIMETABLE = await timetableService.getAllTimetable();
 
+    console.timeEnd("Firestore");
+
+    console.time("Build");
+
     buildTimetable();
+
+    console.timeEnd("Build");
+
 
     // 3. Render initial status info
     updateClockDisplay();
@@ -1668,7 +1686,12 @@ import timetableService from "./timetableService.js";
     updateTomorrowPreview();
 
     // 3.5. Load Announcements
+
+    console.time("Announcements");
+
     initAnnouncements();
+
+    console.timeEnd("Announcements");
 
     // 4. Setup listeners
     setupEventListeners();
@@ -1691,22 +1714,31 @@ import timetableService from "./timetableService.js";
     // Refresh tomorrow's view every hour
     setInterval(updateTomorrowPreview, 3600000);
 
-    // Clear loaders
-    setTimeout(() => {
-      ELEMENTS.loadingScreen.classList.add("fade-out");
-    }, 450);
+    // Clear loaders second loader commented
+    // setTimeout(() => {
+    console.log("Hiding loading screen", performance.now());
 
-    console.log(`VGEC Timetable PWA v${APP_VERSION} initialized successfully.`);
+    //   ELEMENTS.loadingScreen.classList.add("fade-out");
+    // }, 450);
+
+    // console.log(`VGEC Timetable PWA v${APP_VERSION} initialized successfully.`);
 
   }
 
   // Start app!
   if (document.readyState === "loading") {
     document.addEventListener("DOMContentLoaded", async () => {
+      console.time("initializeApp");
       await initializeApp();
+      console.timeEnd("initializeApp");
+
     });
   } else {
+    console.time("initializeApp");
+
     initializeApp();
+
+    console.timeEnd("initializeApp");
   }
 
 })();

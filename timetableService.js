@@ -23,9 +23,7 @@ class TimetableService {
 
   async getAllTimetable() {
 
-    const timetable = {};
-
-    for (const day of DAYS) {
+    const requests = DAYS.map(async (day) => {
 
       const snapshot = await getDocs(
         query(
@@ -34,12 +32,23 @@ class TimetableService {
         )
       );
 
-      timetable[day] = snapshot.docs.map(doc => ({
-        id: doc.id,
-        ...doc.data()
-      }));
+      return {
+        day,
+        lectures: snapshot.docs.map(doc => ({
+          id: doc.id,
+          ...doc.data()
+        }))
+      };
 
-    }
+    });
+
+    const results = await Promise.all(requests);
+
+    const timetable = {};
+
+    results.forEach(({ day, lectures }) => {
+      timetable[day] = lectures;
+    });
 
     return timetable;
 

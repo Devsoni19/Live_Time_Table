@@ -25,6 +25,7 @@
   <!-- Stylesheets -->
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="admin_profile.css">
+  <link rel="stylesheet" href="TimeTableEditor.css">
 
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -366,6 +367,16 @@
             <button type="button" id="btnImportAnnouncements" class="glass-btn">Import JSON</button>
             <input type="file" id="importFile" accept=".json" class="hidden">
           </div>
+
+          <section class="admin-section">
+            <h3>📅 Timetable Editor</h3>
+
+            <div id="timetableEditor">
+              Loading timetable...
+            </div>
+          </section>
+
+
         </form>
 
         <hr class="panel-divider">
@@ -407,6 +418,7 @@
 
   <script type="module" src="app.js"></script>
   <script type="module" src="firebase.js"></script>
+  <script type="module" src="TimeTableEditor.js"></script>
   <!-- <script type="module" src="fix.js"></script> -->
   <!-- <script type="module" src="migrateTimetable.js"></script> -->
 </body>

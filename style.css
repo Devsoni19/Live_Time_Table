@@ -479,6 +479,7 @@ body.dark .glass-btn {
   border: 0;
   height: 1px;
   background: var(--glass-border);
+  margin-top: 10px;
 }
 
 /* Live Tracker Section */
