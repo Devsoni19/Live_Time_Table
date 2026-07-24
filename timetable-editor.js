@@ -108,6 +108,7 @@ async function initializeEditor() {
 
     startRealtimeListener();
 
+
 }
 
 
@@ -139,9 +140,280 @@ function setupEventListeners() {
 
             renderCurrentDay();
 
+
         });
 
     });
+    ELEMENTS.btnAddLecture.addEventListener("click", openAddModal);
+
+    /* Cancel */
+
+    ELEMENTS.btnCancel.addEventListener("click", closeModal);
+
+    // Save
+
+    ELEMENTS.btnSave.addEventListener("click", saveLecture);
+
+    //delete
+
+    ELEMENTS.btnDelete.addEventListener("click", deleteLecture);
+
+}
+
+/* ============================================================
+               Open Add Modal
+============================================================ */
+
+function openAddModal() {
+
+    isEditing = false;
+
+    currentLecture = null;
+
+    ELEMENTS.modalTitle.textContent =
+        "Add Lecture";
+
+    clearForm();
+
+    ELEMENTS.btnDelete.style.display = "none";
+
+    ELEMENTS.modal.classList.remove("hidden");
+
+}
+
+
+/* ============================================================
+   Open Edit Modal
+============================================================ */
+
+function openEditModal(lecture) {
+
+    isEditing = true;
+
+    currentLecture = lecture.id;
+
+    ELEMENTS.modalTitle.textContent =
+        "Edit Lecture";
+
+    ELEMENTS.subject.value =
+        lecture.subject;
+
+    ELEMENTS.faculty.value =
+        lecture.faculty;
+
+    ELEMENTS.start.value =
+        lecture.start;
+
+    ELEMENTS.end.value =
+        lecture.end;
+
+    ELEMENTS.type.value =
+        lecture.type;
+
+    ELEMENTS.btnDelete.style.display =
+        "inline-flex";
+
+    ELEMENTS.modal.classList.remove("hidden");
+
+}
+
+
+/* ============================================================
+   Close Modal
+============================================================ */
+
+function closeModal() {
+
+    ELEMENTS.modal.classList.add("hidden");
+
+    currentLecture = null;
+
+    isEditing = false;
+
+}
+
+
+/* ============================================================
+   Clear Form
+============================================================ */
+
+function clearForm() {
+
+    ELEMENTS.subject.value = "";
+
+    ELEMENTS.faculty.value = "";
+
+    ELEMENTS.start.value = "";
+
+    ELEMENTS.end.value = "";
+
+    ELEMENTS.type.selectedIndex = 0;
+
+}
+
+/* ============================================================
+   Get Current Lecture
+============================================================ */
+
+function getCurrentLecture() {
+
+    return timetable[currentDay]?.find(
+
+        lecture => lecture.id === currentLecture
+
+    );
+
+}
+
+const lecture = getCurrentLecture();
+
+/* ============================================================
+   Validate Form
+============================================================ */
+
+function validateForm() {
+
+    if (!ELEMENTS.subject.value.trim()) {
+
+        alert("Please enter subject.");
+
+        ELEMENTS.subject.focus();
+
+        return false;
+
+    }
+
+    if (!ELEMENTS.faculty.value.trim()) {
+
+        alert("Please enter faculty.");
+
+        ELEMENTS.faculty.focus();
+
+        return false;
+
+    }
+
+    if (!ELEMENTS.start.value) {
+
+        alert("Please select start time.");
+
+        ELEMENTS.start.focus();
+
+        return false;
+
+    }
+
+    if (!ELEMENTS.end.value) {
+
+        alert("Please select end time.");
+
+        ELEMENTS.end.focus();
+
+        return false;
+
+    }
+
+    if (ELEMENTS.start.value >= ELEMENTS.end.value) {
+
+        alert("End time must be after Start time.");
+
+        ELEMENTS.end.focus();
+
+        return false;
+
+    }
+
+    return true;
+
+}
+
+/* ============================================================
+   Get Form Data
+============================================================ */
+
+function getFormData() {
+
+    return {
+
+        subject: ELEMENTS.subject.value.trim(),
+
+        faculty: ELEMENTS.faculty.value.trim(),
+
+        start: ELEMENTS.start.value,
+
+        end: ELEMENTS.end.value,
+
+        type: ELEMENTS.type.value
+
+    };
+
+}
+
+/* ============================================================
+   Save Lecture
+============================================================ */
+
+/* ============================================================
+   Save Lecture
+============================================================ */
+
+async function saveLecture() {
+
+    if (!validateForm()) {
+
+        return;
+
+    }
+
+    const lectureData = {
+
+        ...getFormData(),
+
+        order: isEditing
+            ? getCurrentLecture().order
+            : (timetable[currentDay]?.length || 0) + 1
+
+    };
+
+    try {
+
+        if (isEditing) {
+
+            await timetableService.updateLecture(
+
+                currentDay,
+
+                currentLecture,
+
+                lectureData
+
+            );
+
+        }
+
+        else {
+
+            await timetableService.addLecture(
+
+                currentDay,
+
+                lectureData
+
+            );
+
+        }
+
+        closeModal();
+
+    }
+
+    catch (error) {
+
+        console.error(error);
+
+        alert("Failed to save lecture.");
+
+    }
 
 }
 
@@ -209,18 +481,26 @@ function renderCurrentDay() {
             .trim()
             .toLowerCase();
 
-    let lectures =
-        timetable[currentDay] || [];
+    const lectures = [...(timetable[currentDay] || [])];
 
     if (search) {
 
-        lectures = lectures.filter(l =>
+        lectures = lectures.filter(l => {
 
-            l.subject.toLowerCase().includes(search) ||
+            const subject = (l.subject || "").toLowerCase();
 
-            l.faculty.toLowerCase().includes(search)
+            const faculty = (l.faculty || "").toLowerCase();
 
-        );
+            return (
+
+                subject.includes(search) ||
+
+                faculty.includes(search)
+
+            );
+
+        });
+
 
     }
 
@@ -266,6 +546,9 @@ function createLectureRow(lecture, index) {
 
     const tr = document.createElement("tr");
 
+    tr.dataset.id = lecture.id;
+    tr.dataset.day = currentDay;
+
     tr.innerHTML = `
 
         <td>${index}</td>
@@ -285,16 +568,14 @@ function createLectureRow(lecture, index) {
             <div class="action-buttons">
 
                 <button
-                    class="glass-btn edit-btn"
-                    data-id="${lecture.id}">
+                    class="glass-btn edit-btn">
 
                     ✏
 
                 </button>
 
                 <button
-                    class="glass-btn danger-btn delete-btn"
-                    data-id="${lecture.id}">
+                    class="glass-btn danger-btn delete-btn">
 
                     🗑
 
@@ -306,6 +587,73 @@ function createLectureRow(lecture, index) {
 
     `;
 
+    tr.querySelector(".edit-btn")
+        .addEventListener("click", () => {
+
+            openEditModal(lecture);
+
+        });
+
+    tr.querySelector(".delete-btn")
+        .addEventListener("click", () => {
+
+            currentLecture = lecture.id;
+
+            openEditModal(lecture);
+
+
+        });
+
     return tr;
 
 }
+
+async function deleteLecture() {
+
+    if (!currentLecture) {
+
+        return;
+
+    }
+
+    if (!confirm("Delete this lecture?")) {
+
+        return;
+
+    }
+
+    try {
+
+        await timetableService.deleteLecture(
+
+            currentDay,
+
+            currentLecture
+
+        );
+
+        closeModal();
+
+    }
+
+    catch (error) {
+
+        console.error(error);
+
+        alert("Unable to delete lecture.");
+
+    }
+
+}
+
+/* ============================================================
+   TODO (Part 2.3)
+============================================================ */
+
+/*
+✓ Save Lecture
+✓ Update Lecture
+✓ Delete Lecture
+✓ Validation
+✓ Firestore CRUD
+*/

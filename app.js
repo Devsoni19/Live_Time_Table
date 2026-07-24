@@ -1663,17 +1663,8 @@ import timetableService from "./timetableService.js";
       }
 
     });
-    async function initializeEditor() {
 
-      console.log("Initializing editor...");
 
-      setupEventListeners();
-
-      await loadTimetable();
-
-      startRealtimeListener();
-
-    }
     // 1. Sync Theme System
     initTheme();
 
@@ -1681,11 +1672,6 @@ import timetableService from "./timetableService.js";
 
 
     // 2. Render base layout
-    // Hide loading screen immediately
-    setTimeout(() => {
-      ELEMENTS.loadingScreen.classList.add("fade-out");
-      // console.log("Loading screen hidden", performance.now());
-    }, 600);
 
     // console.time("Firestore");
 
@@ -1722,6 +1708,8 @@ import timetableService from "./timetableService.js";
 
     // 5. Fire Service Worker
     registerServiceWorker();
+    // Everything is ready now
+    hideLoadingScreen();
 
     // 6. Timers
     // Refresh clock every second for ticking effect
@@ -1742,6 +1730,16 @@ import timetableService from "./timetableService.js";
     // }, 450);
 
     // console.log(`VGEC Timetable PWA v${APP_VERSION} initialized successfully.`);
+
+  }
+  // hide loading screen
+  function hideLoadingScreen() {
+
+    ELEMENTS.loadingScreen.classList.add("fade-out");
+
+    setTimeout(() => {
+      ELEMENTS.loadingScreen.remove();
+    }, 300); // Match your CSS transition duration
 
   }
 
