@@ -387,7 +387,12 @@ import timetableService from "./timetableService.js";
           article.id = `lecture-${day.toLowerCase()}-${index}`;
 
           // Class mappings for specific styling
-          article.classList.add(`${lec.subject.toLowerCase()}-subject`);
+          const subjectClass = lec.subject
+            .toLowerCase()
+            .replace(/[^a-z0-9]+/g, "-")
+            .replace(/^-|-$/g, "");
+
+          article.classList.add(`${subjectClass}-subject`);
           if (lec.type === "Lab") {
             article.classList.add("lab-subject");
           }
@@ -1224,6 +1229,11 @@ import timetableService from "./timetableService.js";
 
     onSnapshot(collection(db, "announcements"), (snapshot) => {
 
+      console.log(
+        "Snapshot for",
+        snapshot.size
+      );
+
       announcements = [];
 
       snapshot.forEach((docSnap) => {
@@ -1598,6 +1608,24 @@ import timetableService from "./timetableService.js";
   /**
    * Main setup sequence
    */
+
+
+  //Real time update of Time Table
+  function startRealtimeListener() {
+
+    timetableService.listen((day, lectures) => {
+
+      TIMETABLE[day] = lectures;
+
+      buildTimetable();
+
+      trackLiveSchedule();
+
+      updateTomorrowPreview();
+
+    });
+
+  }
   async function initializeApp() {
     // console.log("initializeApp started", performance.now());
 
@@ -1682,6 +1710,8 @@ import timetableService from "./timetableService.js";
     // console.time("Build");
 
     buildTimetable();
+
+    startRealtimeListener();
 
     // console.timeEnd("Build");
 

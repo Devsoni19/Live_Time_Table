@@ -56,6 +56,9 @@ class TimetableService {
 
   listen(callback) {
 
+    console.log("listen() called");
+
+
     const unsubscribers = [];
 
     DAYS.forEach(day => {

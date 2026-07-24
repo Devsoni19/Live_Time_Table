@@ -450,13 +450,20 @@ async function loadTimetable() {
 
 function startRealtimeListener() {
 
+    console.log("Starting realtime listener...");
+
+
     unsubscribe = timetableService.listen(
 
         (day, lectures) => {
 
+            console.log("Realtime Update:", day, lectures);
+
             timetable[day] = lectures;
 
             if (day === currentDay) {
+
+                console.log("Rendering Current Day");
 
                 renderCurrentDay();
 
