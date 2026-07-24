@@ -1165,8 +1165,8 @@ import timetableService from "./timetableService.js";
   function registerServiceWorker() {
     if (!("serviceWorker" in navigator)) return;
 
-    window.addEventListener("load", () => {
-      navigator.serviceWorker.register("service-worker.js")
+    window.addEventListener("load", async () => {
+      await navigator.serviceWorker.register("service-worker.js")
         .then(reg => {
           // console.log("Service Worker registered successfully with scope: ", reg.scope);
 
@@ -1419,6 +1419,15 @@ import timetableService from "./timetableService.js";
     }
   }
 
+  const btnEditor =
+    document.getElementById("btnTimetableEditor");
+
+  btnEditor.addEventListener("click", () => {
+
+    window.location.href = "timetable-editor.html";
+
+  });
+
   function closeAdminModal() {
     ELEMENTS.adminModal.classList.add("hidden");
   }
@@ -1594,9 +1603,9 @@ import timetableService from "./timetableService.js";
 
     onAuthStateChanged(auth, (user) => {
 
-      // console.log("User object:", user);
-      // console.log("Display Name:", user?.displayName);
-      // console.log("Email:", user?.email);
+      console.log("User object:", user);
+      console.log("Display Name:", user?.displayName);
+      console.log("Email:", user?.email);
       // console.log("Photo URL:", user?.photoURL);
 
       if (!user) {
@@ -1654,6 +1663,17 @@ import timetableService from "./timetableService.js";
       }
 
     });
+    async function initializeEditor() {
+
+      console.log("Initializing editor...");
+
+      setupEventListeners();
+
+      await loadTimetable();
+
+      startRealtimeListener();
+
+    }
     // 1. Sync Theme System
     initTheme();
 
@@ -1667,17 +1687,17 @@ import timetableService from "./timetableService.js";
       // console.log("Loading screen hidden", performance.now());
     }, 600);
 
-    console.time("Firestore");
+    // console.time("Firestore");
 
     TIMETABLE = await timetableService.getAllTimetable();
 
-    console.timeEnd("Firestore");
+    // console.timeEnd("Firestore");
 
-    console.time("Build");
+    // console.time("Build");
 
     buildTimetable();
 
-    console.timeEnd("Build");
+    // console.timeEnd("Build");
 
 
     // 3. Render initial status info
@@ -1687,11 +1707,11 @@ import timetableService from "./timetableService.js";
 
     // 3.5. Load Announcements
 
-    console.time("Announcements");
+    // console.time("Announcements");
 
     initAnnouncements();
 
-    console.timeEnd("Announcements");
+    // console.timeEnd("Announcements");
 
     // 4. Setup listeners
     setupEventListeners();
@@ -1712,11 +1732,11 @@ import timetableService from "./timetableService.js";
     }, 1000);
 
     // Refresh tomorrow's view every hour
-    setInterval(updateTomorrowPreview, 3600000);
+    setInterval(updateTomorrowPreview, 60000);
 
     // Clear loaders second loader commented
     // setTimeout(() => {
-    console.log("Hiding loading screen", performance.now());
+    // console.log("Hiding loading screen", performance.now());
 
     //   ELEMENTS.loadingScreen.classList.add("fade-out");
     // }, 450);
@@ -1728,17 +1748,17 @@ import timetableService from "./timetableService.js";
   // Start app!
   if (document.readyState === "loading") {
     document.addEventListener("DOMContentLoaded", async () => {
-      console.time("initializeApp");
+      // console.time("initializeApp");
       await initializeApp();
-      console.timeEnd("initializeApp");
+      // console.timeEnd("initializeApp");
 
     });
   } else {
-    console.time("initializeApp");
+    // console.time("initializeApp");
 
     initializeApp();
 
-    console.timeEnd("initializeApp");
+    // console.timeEnd("initializeApp");
   }
 
 })();

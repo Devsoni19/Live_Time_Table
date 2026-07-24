@@ -366,15 +366,12 @@
             <button type="button" id="btnExportAnnouncements" class="glass-btn">Export JSON</button>
             <button type="button" id="btnImportAnnouncements" class="glass-btn">Import JSON</button>
             <input type="file" id="importFile" accept=".json" class="hidden">
+            <button id="btnTimetableEditor" class="glass-btn">
+
+              📅 Edit Timetable
+
+            </button>
           </div>
-
-          <section class="admin-section">
-            <h3>📅 Timetable Editor</h3>
-
-            <div id="timetableEditor">
-              Loading timetable...
-            </div>
-          </section>
 
 
         </form>
@@ -418,7 +415,7 @@
 
   <script type="module" src="app.js"></script>
   <script type="module" src="firebase.js"></script>
-  <script type="module" src="TimeTableEditor.js"></script>
+  <script type="module" src="timetable-editor.js"></script>
   <!-- <script type="module" src="fix.js"></script> -->
   <!-- <script type="module" src="migrateTimetable.js"></script> -->
 </body>

@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Timetable Editor</title>
+
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="admin_editor.css">
+
+  <link rel="icon" href="icons/icon-192.png">
+
+</head>
+
+<body>
+
+  <div class="bg-blobs">
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+    <div class="blob blob-3"></div>
+  </div>
+
+  <div class="editor-page">
+
+    <!-- ========================= -->
+    <!-- Header -->
+    <!-- ========================= -->
+
+    <header class="glass editor-header">
+
+      <div>
+
+        <h1>📅 Timetable Editor</h1>
+
+        <p>
+          VGEC ICT Semester 5 • O4 Batch
+        </p>
+
+      </div>
+
+      <div class="editor-header-buttons">
+
+        <button id="btnBack" class="glass-btn">
+
+          ← Back
+
+        </button>
+
+        <button id="btnAddLecture" class="glass-btn primary-btn">
+
+          + Add Lecture
+
+        </button>
+
+      </div>
+
+    </header>
+
+
+
+    <!-- ========================= -->
+    <!-- Search -->
+    <!-- ========================= -->
+
+    <section class="glass editor-toolbar">
+
+      <input type="text" id="searchLecture" placeholder="Search Subject or Faculty">
+
+    </section>
+
+
+
+    <!-- ========================= -->
+    <!-- Day Tabs -->
+    <!-- ========================= -->
+
+    <section class="day-tabs">
+
+      <button class="day-tab active" data-day="Monday">
+        Monday
+      </button>
+
+      <button class="day-tab" data-day="Tuesday">
+        Tuesday
+      </button>
+
+      <button class="day-tab" data-day="Wednesday">
+        Wednesday
+      </button>
+
+      <button class="day-tab" data-day="Thursday">
+        Thursday
+      </button>
+
+      <button class="day-tab" data-day="Friday">
+        Friday
+      </button>
+
+    </section>
+
+
+
+    <!-- ========================= -->
+    <!-- Table -->
+    <!-- ========================= -->
+
+    <section class="glass editor-card">
+
+      <table class="editor-table">
+
+        <thead>
+
+          <tr>
+
+            <th>#</th>
+
+            <th>Subject</th>
+
+            <th>Faculty</th>
+
+            <th>Start</th>
+
+            <th>End</th>
+
+            <th>Type</th>
+
+            <th>Actions</th>
+
+          </tr>
+
+        </thead>
+
+        <tbody id="lectureTableBody">
+
+          <!-- JS -->
+
+        </tbody>
+
+      </table>
+
+    </section>
+
+  </div>
+
+
+
+  <!-- ========================= -->
+  <!-- Modal -->
+  <!-- ========================= -->
+
+  <div id="lectureModal" class="editor-modal hidden">
+
+    <div class="glass modal-box">
+
+      <h2 id="modalTitle">
+
+        Edit Lecture
+
+      </h2>
+
+
+
+      <div class="form-group">
+
+        <label>
+
+          Subject
+
+        </label>
+
+        <input id="subject" type="text">
+
+      </div>
+
+
+
+      <div class="form-group">
+
+        <label>
+
+          Faculty
+
+        </label>
+
+        <input id="faculty" type="text">
+
+      </div>
+
+
+
+      <div class="row">
+
+        <div class="form-group">
+
+          <label>
+
+            Start
+
+          </label>
+
+          <input id="start" type="time">
+
+        </div>
+
+        <div class="form-group">
+
+          <label>
+
+            End
+
+          </label>
+
+          <input id="end" type="time">
+
+        </div>
+
+      </div>
+
+
+
+      <div class="form-group">
+
+        <label>
+
+          Type
+
+        </label>
+
+        <select id="type">
+
+          <option>
+
+            Lecture
+
+          </option>
+
+          <option>
+
+            Lab
+
+          </option>
+
+        </select>
+
+      </div>
+
+
+
+      <div class="modal-buttons">
+
+        <button id="btnSave" class="glass-btn primary-btn">
+
+          💾 Save
+
+        </button>
+
+        <button id="btnDelete" class="glass-btn danger-btn">
+
+          🗑 Delete
+
+        </button>
+
+        <button id="btnCancel" class="glass-btn">
+
+          Cancel
+
+        </button>
+
+      </div>
+
+    </div>
+
+  </div>
+
+
+
+  <script type="module" src="timetable-editor.js">
+  </script>
+
+</body>
+
+</html>

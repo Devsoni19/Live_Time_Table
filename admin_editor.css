@@ -1,0 +1,145 @@
+.editor-page {
+  width: min(1400px, 95%);
+  margin: auto;
+  padding: 35px 0 80px;
+}
+
+.editor-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 25px;
+  padding: 24px;
+}
+
+.editor-header-buttons {
+  display: flex;
+  gap: 12px;
+}
+
+.editor-toolbar {
+  padding: 18px;
+  margin-bottom: 20px;
+}
+
+.editor-toolbar input {
+  width: 100%;
+}
+
+.day-tabs {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 25px;
+  flex-wrap: wrap;
+}
+
+.day-tab {
+  padding: 12px 24px;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  background: var(--glass-bg);
+  color: inherit;
+  backdrop-filter: blur(18px);
+}
+
+.day-tab.active {
+  background: var(--primary-color);
+  color: white;
+}
+
+.editor-card {
+  padding: 20px;
+  overflow: auto;
+}
+
+.editor-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.editor-table th {
+  padding: 18px;
+  text-align: left;
+}
+
+.editor-table td {
+  padding: 16px;
+  border-top: 1px solid var(--glass-border);
+}
+
+.editor-table tr:hover {
+  background: rgba(255, 255, 255, .04);
+}
+
+.action-buttons {
+  display: flex;
+  gap: 8px;
+}
+
+.action-buttons button {
+  min-width: 40px;
+}
+
+.editor-modal {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: rgba(0, 0, 0, .45);
+  z-index: 999;
+}
+
+.hidden {
+  display: none;
+}
+
+.modal-box {
+  width: min(520px, 92%);
+  padding: 28px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 18px;
+}
+
+.row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.modal-buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 20px;
+}
+
+@media(max-width:768px) {
+
+  .editor-header {
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .editor-header-buttons {
+    width: 100%;
+  }
+
+  .editor-header-buttons button {
+    flex: 1;
+  }
+
+  .row {
+    grid-template-columns: 1fr;
+  }
+
+  .editor-table {
+    min-width: 750px;
+  }
+
+}
