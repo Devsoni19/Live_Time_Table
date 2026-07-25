@@ -500,7 +500,7 @@ function renderCurrentDay() {
             .trim()
             .toLowerCase();
 
-    const lectures = [...(timetable[currentDay] || [])];
+    let lectures = [...(timetable[currentDay] || [])];
 
     if (search) {
 
