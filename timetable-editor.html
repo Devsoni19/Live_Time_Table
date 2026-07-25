@@ -34,13 +34,8 @@
     <header class="glass editor-header">
 
       <div>
-
         <h1>📅 Timetable Editor</h1>
-
-        <p>
-          VGEC ICT Semester 5 • O4 Batch
-        </p>
-
+        <p>VGEC ICT Semester 5 • O4 Batch</p>
       </div>
 
       <div class="editor-header-buttons">
@@ -69,7 +64,7 @@
 
     <section class="glass editor-toolbar">
 
-      <input type="text" id="searchLecture" placeholder="Search Subject or Faculty">
+      <input type="text" id="searchLecture" placeholder="Search Subject or Faculty...">
 
     </section>
 
@@ -112,6 +107,10 @@
     <section class="glass editor-card">
 
       <table class="editor-table">
+
+        <caption class="sr-only">
+          Timetable lectures
+        </caption>
 
         <thead>
 
@@ -157,11 +156,7 @@
 
     <div class="glass modal-box">
 
-      <h2 id="modalTitle">
-
-        Edit Lecture
-
-      </h2>
+      <h2 id="modalTitle"></h2>
 
 
 
@@ -173,7 +168,11 @@
 
         </label>
 
-        <input id="subject" type="text">
+        <select id="subject" required>
+          <option value="">
+            Select Subject
+          </option>
+        </select>
 
       </div>
 
@@ -181,13 +180,11 @@
 
       <div class="form-group">
 
-        <label>
+        <label for="faculty">Faculty</label>
 
-          Faculty
-
-        </label>
-
-        <input id="faculty" type="text">
+        <select id="faculty" required>
+          <option value="">Loading faculty...</option>
+        </select>
 
       </div>
 
@@ -197,11 +194,8 @@
 
         <div class="form-group">
 
-          <label>
+          <label for="start">Start</label>
 
-            Start
-
-          </label>
 
           <input id="start" type="time">
 
@@ -209,13 +203,10 @@
 
         <div class="form-group">
 
-          <label>
+          <label for="end">End</label>
 
-            End
 
-          </label>
-
-          <input id="end" type="time">
+          <input id="end" type="time" required>
 
         </div>
 
@@ -225,25 +216,13 @@
 
       <div class="form-group">
 
-        <label>
+        <label for="type">Type</label>
 
-          Type
+        <select id="type" required>
 
-        </label>
+          <option value="Lecture">Lecture</option>
 
-        <select id="type">
-
-          <option>
-
-            Lecture
-
-          </option>
-
-          <option>
-
-            Lab
-
-          </option>
+          <option value="Lab">Lab</option>
 
         </select>
 

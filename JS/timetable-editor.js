@@ -1,8 +1,16 @@
+//consoe log for if script loading
+console.log("script loaded")
+
 import {
     auth,
     onAuthStateChanged,
     signOut
 } from "./firebase.js";
+
+import {
+    getFaculty,
+    getSubjects
+} from "./masterDataService.js";
 
 import timetableService from "./timetableService.js";
 
@@ -99,6 +107,10 @@ let isEditing = false;
 ============================================================ */
 
 async function initializeEditor() {
+
+    await loadFacultyDropdown();
+
+    await loadSubjectsDropdown();
 
     console.log("Initializing editor...");
 
@@ -664,3 +676,63 @@ async function deleteLecture() {
 ✓ Validation
 ✓ Firestore CRUD
 */
+
+// Populate the dropdown of Faculty
+
+async function loadFacultyDropdown() {
+
+    console.log("Faculty list loaded");
+
+    const faculty = await getFaculty();
+
+    ELEMENTS.faculty.innerHTML =
+        '<option value="">Select Faculty</option>';
+
+    faculty.forEach(f => {
+
+        const option = document.createElement("option");
+
+        option.value = f.code;
+        option.textContent = f.code;
+
+        ELEMENTS.faculty.appendChild(option);
+
+    });
+
+}
+// Populate the dropdown of Subjects
+async function loadSubjectsDropdown() {
+
+    console.log("Subject list loaded");
+
+    try {
+
+        const subjects = await getSubjects();
+
+        console.log("Subjects Array:", subjects);
+
+        ELEMENTS.subject.innerHTML =
+            '<option value="">Select Subject</option>';
+
+        subjects.forEach(subject => {
+
+            console.log(subject);
+
+            const option = document.createElement("option");
+
+            option.value = subject.id;
+
+            option.textContent = subject.shortName;
+
+            ELEMENTS.subject.appendChild(option);
+
+        });
+
+    }
+    catch (err) {
+
+        console.error(err);
+
+    }
+
+}
