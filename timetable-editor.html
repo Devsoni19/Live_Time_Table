@@ -14,6 +14,9 @@
   <link rel="stylesheet" href="CSS/admin_editor.css">
 
   <link rel="icon" href="icons/icon-192.png">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+    integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
 
 </head>
 
@@ -64,7 +67,13 @@
 
     <section class="glass editor-toolbar">
 
-      <input type="text" id="searchLecture" placeholder="Search Subject or Faculty...">
+      <div class="editor-search-box">
+
+        <span class="search-icon">🔍</span>
+
+        <input type="text" id="searchLecture" placeholder="Search subject, faculty or lecture type...">
+
+      </div>
 
     </section>
 
@@ -106,41 +115,44 @@
 
     <section class="glass editor-card">
 
-      <table class="editor-table">
+      <div class="editor-table-wrapper">
 
-        <caption class="sr-only">
-          Timetable lectures
-        </caption>
 
-        <thead>
+        <table class="editor-table">
 
-          <tr>
+          <caption class="sr-only">
+            Timetable lectures
+          </caption>
 
-            <th>#</th>
+          <thead>
 
-            <th>Subject</th>
+            <tr>
 
-            <th>Faculty</th>
+              <th>#</th>
 
-            <th>Start</th>
+              <th>Subject</th>
 
-            <th>End</th>
+              <th>Faculty</th>
 
-            <th>Type</th>
+              <th>Time</th>
 
-            <th>Actions</th>
+              <th>Type</th>
 
-          </tr>
+              <th>Actions</th>
 
-        </thead>
+            </tr>
 
-        <tbody id="lectureTableBody">
+          </thead>
 
-          <!-- JS -->
+          <tbody id="lectureTableBody">
 
-        </tbody>
+            <!-- JS -->
 
-      </table>
+          </tbody>
+
+        </table>
+
+      </div>
 
     </section>
 

@@ -101,6 +101,8 @@ let currentLecture = null;
 
 let isEditing = false;
 
+let SUBJECTS = {};
+
 
 /* ============================================================
    Initialize Editor
@@ -506,61 +508,68 @@ function renderCurrentDay() {
 
         lectures = lectures.filter(l => {
 
-            const subject = (l.subject || "").toLowerCase();
+            const subjectData = getSubject(l.subject);
 
+
+            const subject = (l.subject || "").toLowerCase();
+            const fullName = (subjectData.fullName || "").toLowerCase();
             const faculty = (l.faculty || "").toLowerCase();
+            const type = (l.type || "").toLowerCase();
 
             return (
-
                 subject.includes(search) ||
-
+                fullName.includes(search) ||
+                type.includes(search) ||
                 faculty.includes(search)
-
             );
 
         });
 
+    }
+
+    // Sort lectures by start time
+    function toMinutes(time) {
+
+        const [h, m] = time.split(":").map(Number);
+
+        return h * 60 + m;
 
     }
+    lectures.sort((a, b) =>
+        toMinutes(a.start) - toMinutes(b.start)
+    );
 
     if (!lectures.length) {
 
         ELEMENTS.tableBody.innerHTML = `
-
         <tr>
-
             <td colspan="7">
-
                 No lectures found.
-
             </td>
-
         </tr>
-
         `;
 
         return;
-
     }
 
     lectures.forEach((lecture, index) => {
 
         ELEMENTS.tableBody.appendChild(
-
             createLectureRow(
-
                 lecture,
-
                 index + 1
-
             )
-
         );
 
     });
 
 }
 
+function getSubject(subjectCode) {
+
+    return SUBJECTS[subjectCode] || {};
+
+}
 function createLectureRow(lecture, index) {
 
     const tr = document.createElement("tr");
@@ -568,43 +577,73 @@ function createLectureRow(lecture, index) {
     tr.dataset.id = lecture.id;
     tr.dataset.day = currentDay;
 
+
+    const subject = getSubject(lecture.subject);
+
+    const color = subject.color || "#2563eb";
+
+    const background = `${color}20`;
+
+    const border = `${color}40`;
+
     tr.innerHTML = `
 
-        <td>${index}</td>
+    <td>${index}</td>
 
-        <td>${lecture.subject}</td>
+    <td>
+    <span
+        class="subject-chip"
+        title="${subject.fullName || lecture.subject}"
+        style="
+            color:${color};
+            background:${background};
+            border-color:${border};
+        "
+        >
+        ${lecture.subject}
+    </span>
+     </td>
 
-        <td>${lecture.faculty}</td>
+    <td>${lecture.faculty}</td>
 
-        <td>${lecture.start}</td>
+    <td class="time-cell">
+        ${formatTime(lecture.start)}
+        <span class="time-arrow">→</span>
+        ${formatTime(lecture.end)}
+    </td>
 
-        <td>${lecture.end}</td>
+    <td>
+        <span class="type-badge ${lecture.type.toLowerCase()}">
+            ${lecture.type}
+        </span>
+    </td>
 
-        <td>${lecture.type}</td>
+    <td>
 
-        <td>
+        <div class="action-buttons">
 
-            <div class="action-buttons">
+            <button
+                class="glass-btn edit-btn"
+                title="Edit">
 
-                <button
-                    class="glass-btn edit-btn">
+                <i class="fa-solid fa-pen"></i>
 
-                    ✏
 
-                </button>
+            </button>
 
-                <button
-                    class="glass-btn danger-btn delete-btn">
+            <button
+                class="glass-btn danger-btn delete-btn"
+                title="Delete">
 
-                    🗑
+                <i class="fa-solid fa-trash"></i>
 
-                </button>
+            </button>
 
-            </div>
+        </div>
 
-        </td>
+    </td>
 
-    `;
+`;
 
     tr.querySelector(".edit-btn")
         .addEventListener("click", () => {
@@ -626,7 +665,23 @@ function createLectureRow(lecture, index) {
     return tr;
 
 }
+function formatTime(time) {
 
+    const [hour, minute] = time.split(":").map(Number);
+
+    const date = new Date();
+
+    date.setHours(hour, minute);
+
+    return date.toLocaleTimeString([], {
+
+        hour: "numeric",
+        minute: "2-digit",
+        hour12: true
+
+    });
+
+}
 async function deleteLecture() {
 
     if (!currentLecture) {
@@ -709,14 +764,15 @@ async function loadSubjectsDropdown() {
 
         const subjects = await getSubjects();
 
-        console.log("Subjects Array:", subjects);
+        SUBJECTS = {};
 
         ELEMENTS.subject.innerHTML =
             '<option value="">Select Subject</option>';
 
         subjects.forEach(subject => {
 
-            console.log(subject);
+            // Store complete subject object
+            SUBJECTS[subject.id] = subject;
 
             const option = document.createElement("option");
 

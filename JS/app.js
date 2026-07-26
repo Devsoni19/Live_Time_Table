@@ -366,7 +366,12 @@ import timetableService from "./timetableService.js";
       });
 
       const lectureList = daySection.querySelector(".lecture-list");
-      const lectures = TIMETABLE[day];
+
+      const lectures = [...TIMETABLE[day]].sort((a, b) => {
+
+        return toMinutes(a.start) - toMinutes(b.start);
+
+      });
 
       if (lectures.length === 0) {
         // Free day placeholder
@@ -784,8 +789,8 @@ import timetableService from "./timetableService.js";
     }
 
     // Current day's lectures
-    let previewLectures = TIMETABLE[DAYS[previewDayIndex]] || [];
-
+    let previewLectures = [...(TIMETABLE[DAYS[previewDayIndex]] || [])]
+      .sort((a, b) => toMinutes(a.start) - toMinutes(b.start));
     // During today -> show remaining lectures only
     if (previewDayIndex === todayIndex && todayIndex >= 1 && todayIndex <= 5) {
 
