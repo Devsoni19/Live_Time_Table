@@ -17,6 +17,11 @@
   gap: 12px;
 }
 
+.logo-area {
+  display: flex;
+
+}
+
 .editor-toolbar {
   padding: 18px;
   margin-bottom: 20px;
@@ -172,6 +177,8 @@ body.dark .day-tab:hover {
 .editor-card {
 
   width: fit-content;
+
+  overflow-x: auto;
 
   padding: 0;
 
@@ -417,15 +424,20 @@ body.dark .editor-table tbody tr:nth-child(even) {
   margin-top: 20px;
 }
 
+/* =====================================
+   Mobile
+===================================== */
+
 @media(max-width:768px) {
 
   .editor-header {
     flex-direction: column;
     gap: 20px;
+    align-items: baseline;
   }
 
   .editor-header-buttons {
-    width: 100%;
+    width: auto;
   }
 
   .editor-header-buttons button {
@@ -436,6 +448,128 @@ body.dark .editor-table tbody tr:nth-child(even) {
     grid-template-columns: 1fr;
   }
 
+  .editor-table-wrapper {
+
+    overflow-x: auto;
+    overflow-y: hidden;
+
+    -webkit-overflow-scrolling: touch;
+
+    scrollbar-width: thin;
+  }
+
+  .editor-table {
+
+    min-width: 850px;
+    /* or 900px */
+    width: max-content;
+  }
+
+
+
+
+  .day-tabs {
+
+    display: flex;
+    flex-wrap: nowrap;
+
+    gap: 10px;
+
+    overflow-x: auto;
+    overflow-y: hidden;
+
+    padding-bottom: 6px;
+
+    -webkit-overflow-scrolling: touch;
+
+    scrollbar-width: none;
+    /* Firefox */
+
+  }
+
+  .day-tabs::-webkit-scrollbar {
+
+    display: none;
+    /* Chrome, Edge, Safari */
+
+  }
+
+  .day-tab {
+
+    flex: 0 0 auto;
+
+    min-width: 110px;
+
+    padding: 12px 18px;
+
+    font-size: .9rem;
+
+  }
+
+
+
+
+}
+
+@media (max-width: 480px) {
+
+  .editor-page {
+    width: 95%;
+    padding: 24px 0 60px;
+  }
+
+  .editor-header {
+    padding: 18px;
+  }
+
+  .editor-header h1 {
+    font-size: 1.8rem;
+  }
+
+  .editor-header p {
+    font-size: .95rem;
+  }
+
+  .editor-toolbar {
+    padding: 14px;
+  }
+
+  .editor-search-box {
+    padding: 12px 14px;
+  }
+
+  .day-tabs {
+
+    gap: 8px;
+
+    overflow-x: auto;
+    overflow-y: hidden;
+
+    flex-wrap: nowrap;
+
+    padding-bottom: 4px;
+
+    -webkit-overflow-scrolling: touch;
+
+    scrollbar-width: none;
+
+  }
+
+  .day-tabs::-webkit-scrollbar {
+    display: none;
+  }
+
+  .day-tab {
+
+    flex: 0 0 auto;
+
+    min-width: 95px;
+
+    padding: 10px 16px;
+
+    font-size: .85rem;
+
+  }
 
 }
 

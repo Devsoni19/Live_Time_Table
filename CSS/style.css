@@ -332,6 +332,7 @@ body.dark .glass-btn {
   display: flex;
   align-items: center;
   gap: 16px;
+  align-items: center;
 }
 
 .logo-img {
@@ -343,10 +344,18 @@ body.dark .glass-btn {
   border-radius: var(--radius-md);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
   transition: transform var(--transition-fast);
+  -webkit-transition: transform var(--transition-fast);
+  -moz-transition: transform var(--transition-fast);
+  -ms-transition: transform var(--transition-fast);
+  -o-transition: transform var(--transition-fast);
 }
 
 .logo-img:hover {
-  transform: scale(1.08) rotate(5deg);
+  transform: scale(1.18);
+  -webkit-transform: scale(1.18);
+  -moz-transform: scale(1.18);
+  -ms-transform: scale(1.18);
+  -o-transform: scale(1.18);
 }
 
 .main-header h1 {
@@ -1758,7 +1767,7 @@ body.dark .announcement-card {
   display: none !important;
 }
 
-// changes made here 17/07
+/* changes made here 17/07 */
 
 body.dark .modal-close-btn {
   background: rgba(255, 255, 255, 0.05);
