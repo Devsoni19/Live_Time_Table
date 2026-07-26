@@ -192,6 +192,8 @@ body.dark .day-tab:hover {
 
 .editor-table-wrapper {
 
+  width: 100%;
+
   overflow: auto;
 
   border-radius: var(--radius-lg);
@@ -430,6 +432,16 @@ body.dark .editor-table tbody tr:nth-child(even) {
 
 @media(max-width:768px) {
 
+  .editor-card {
+
+    width: 100%;
+
+    overflow-x: auto;
+
+    padding: 0;
+
+  }
+
   .editor-header {
     flex-direction: column;
     gap: 20px;
@@ -512,6 +524,16 @@ body.dark .editor-table tbody tr:nth-child(even) {
 }
 
 @media (max-width: 480px) {
+
+  .editor-card {
+
+    width: 100%;
+
+    overflow-x: auto;
+
+    padding: 0;
+
+  }
 
   .editor-page {
     width: 95%;
