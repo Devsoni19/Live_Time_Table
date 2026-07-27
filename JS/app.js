@@ -280,6 +280,30 @@ import { initTheme, toggleTheme } from "./theme.js";
     return `${h12}:${mStr} ${ampm}`;
   }
 
+  function formatDuration(minutes) {
+
+    if (minutes < 60) {
+      return `${minutes} min`;
+    }
+    const days = Math.floor(minutes / 1440);
+    const hours = Math.floor(minutes / 60);
+    const mins = minutes % 60;
+
+
+    if (days > 0) {
+      if (hours > 0) {
+        return `${days} day${days > 1 ? "s" : ""} ${hours} hr`;
+      }
+      return `${days} day${days > 1 ? "s" : ""}`;
+    }
+
+    if (mins === 0) {
+      return `${hours} hr`;
+    }
+
+    return `${hours} hr ${mins} min`;
+  }
+
   function normalizeText(value) {
     return String(value || "")
       .toLowerCase()
@@ -443,7 +467,7 @@ import { initTheme, toggleTheme } from "./theme.js";
     ELEMENTS.trackerBadge.className = "tracker-badge";
 
     // Check for Weekend
-    if (now.getDay() === 0 || now.getDay() === 6) {
+    if (now.getDay() === 0) {
       updateStatusDisplay({
         badge: "WEEKEND",
         badgeClass: "weekend",
@@ -482,7 +506,7 @@ import { initTheme, toggleTheme } from "./theme.js";
         badge: "PRE-COLLEGE",
         badgeClass: "next",
         title: `⏰ Waiting for College`,
-        subtitle: `First class starts in ${waitTime} min (${firstLec.subject})`,
+        subtitle: `First class starts in ${formatDuration(waitTime)} (${firstLec.subject})`,
         progress: 0,
         showProgress: false
       });
@@ -776,7 +800,7 @@ import { initTheme, toggleTheme } from "./theme.js";
 
           previewDayIndex++;
 
-          if (previewDayIndex > 5) {
+          if (previewDayIndex > 6) {
             previewDayIndex = 1; // Friday -> Monday
           }
         }
@@ -809,7 +833,7 @@ import { initTheme, toggleTheme } from "./theme.js";
 
         previewDayIndex++;
 
-        if (previewDayIndex > 5) {
+        if (previewDayIndex > 6) {
           previewDayIndex = 1;
         }
 
@@ -1736,15 +1760,14 @@ import { initTheme, toggleTheme } from "./theme.js";
 
     // Refresh clock every second for ticking effect
 
-    // setInterval(() => {
-    //   updateClockDisplay();
-    //   trackLiveSchedule();
-    //   updateTomorrowPreview();
-    // }, 1000);
+    setInterval(() => {
+      updateClockDisplay();
+    }, 1000);
 
-    // setInterval(() => {
-    //   updateTomorrowPreview();
-    // }, 60000);
+    setInterval(() => {
+      trackLiveSchedule();
+      updateTomorrowPreview();
+    }, 60000);
 
     // Refresh tomorrow's view every hour
 

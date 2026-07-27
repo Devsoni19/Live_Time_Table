@@ -883,7 +883,7 @@ function setupKeyboardShortcuts() {
 
             const dayIndex = parseInt(e.key);
 
-            if (dayIndex >= 1 && dayIndex <= 5) {
+            if (dayIndex >= 1 && dayIndex <= 6) {
 
                 e.preventDefault();
 

@@ -16,7 +16,8 @@ const DAYS = [
   "Tuesday",
   "Wednesday",
   "Thursday",
-  "Friday"
+  "Friday",
+  "Saturday"
 ];
 
 class TimetableService {
