@@ -36,6 +36,8 @@ import {
 
 import timetableService from "./timetableService.js";
 
+import { initTheme, toggleTheme } from "./theme.js";
+
 (function () {
   'use strict';
 
@@ -240,7 +242,7 @@ import timetableService from "./timetableService.js";
 
   // State flags
 
-  let activeTheme = "light";
+
   let activeView = "daily"; // 'daily' or 'weekly'
   let notificationsEnabled = false;
   let notifiedForNextLecture = false;
@@ -674,6 +676,8 @@ import timetableService from "./timetableService.js";
         });
       }
     }, 1000);
+
+
   }
 
   // ==========================================
@@ -809,7 +813,8 @@ import timetableService from "./timetableService.js";
           previewDayIndex = 1;
         }
 
-        previewLectures = TIMETABLE[DAYS[previewDayIndex]] || [];
+        previewLectures = [...(TIMETABLE[DAYS[previewDayIndex]] || [])]
+          .sort((a, b) => toMinutes(a.start) - toMinutes(b.start));
       }
     }
 
@@ -854,7 +859,8 @@ import timetableService from "./timetableService.js";
 
       return;
     }
-
+    /*Debug*/
+    console.log("After filtering:");
     previewLectures.forEach(lec => {
 
       const item = document.createElement("div");
@@ -986,38 +992,16 @@ import timetableService from "./timetableService.js";
   /**
    * Dynamic Theme management (Light vs Dark)
    */
-  function initTheme() {
-    const cachedTheme = localStorage.getItem("theme");
-    // Default to OS Preference if no cache
-    const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
 
-    activeTheme = cachedTheme || (prefersDark ? "dark" : "light");
+  initTheme(ELEMENTS.themeBtn);
 
-    if (activeTheme === "dark") {
-      document.body.classList.add("dark");
-      ELEMENTS.themeBtn.textContent = "☀️";
-    } else {
-      document.body.classList.remove("dark");
-      ELEMENTS.themeBtn.textContent = "🌙";
-    }
-  }
+  ELEMENTS.themeBtn.addEventListener("click", () => {
+    toggleTheme(ELEMENTS.themeBtn);
+  });
 
-  function toggleTheme() {
-    if (activeTheme === "light") {
-      activeTheme = "dark";
-      document.body.classList.add("dark");
-      ELEMENTS.themeBtn.textContent = "☀️";
-    } else {
-      activeTheme = "light";
-      document.body.classList.remove("dark");
-      ELEMENTS.themeBtn.textContent = "🌙";
-    }
-    localStorage.setItem("theme", activeTheme);
-  }
 
-  /**
-   * Vanilla JS Falling Confetti (completely offline, self-contained)
-   */
+  /*** Vanilla JS Falling Confetti (completely offline, self-contained)*/
+
   let confettiTriggered = false;
   function triggerConfettiCelebration() {
     if (confettiTriggered) return;
@@ -1624,6 +1608,8 @@ import timetableService from "./timetableService.js";
 
       buildTimetable();
 
+      updateViewMode();
+
       trackLiveSchedule();
 
       updateTomorrowPreview();
@@ -1747,15 +1733,22 @@ import timetableService from "./timetableService.js";
     hideLoadingScreen();
 
     // 6. Timers
+
     // Refresh clock every second for ticking effect
-    setInterval(() => {
-      updateClockDisplay();
-      trackLiveSchedule();
-      updateTomorrowPreview();
-    }, 1000);
+
+    // setInterval(() => {
+    //   updateClockDisplay();
+    //   trackLiveSchedule();
+    //   updateTomorrowPreview();
+    // }, 1000);
+
+    // setInterval(() => {
+    //   updateTomorrowPreview();
+    // }, 60000);
 
     // Refresh tomorrow's view every hour
-    setInterval(updateTomorrowPreview, 60000);
+
+    // setInterval(updateTomorrowPreview, 60000); Debug uncomment this 
 
     // Clear loaders second loader commented
     // setTimeout(() => {
