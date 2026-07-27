@@ -1,3 +1,27 @@
+/**
+ * ==========================================
+ * Firestore Seed Script
+ * ==========================================
+ *
+ * Purpose:
+ * - Add or update Subjects
+ * - Add or update Faculty
+ *
+ * Usage:
+ * 1. Uncomment the function(s) you want to run.
+ * 2. Run this file once.
+ * 3. Verify the data in Firestore.
+ * 4. Comment the function(s) again to avoid accidental execution.
+ *
+ * Notes:
+ * - setDoc() DOES NOT create duplicate documents.
+ * - Existing document IDs are overwritten.
+ * - New IDs are created automatically.
+ * - Keep IDs unique.
+ */
+
+
+
 import {
   db,
   collection,
@@ -5,6 +29,14 @@ import {
   setDoc,
   serverTimestamp
 } from "./firebase.js";
+
+
+// ==========================================
+// Subjects Master Data
+// Add new subjects here.
+// Existing IDs will be updated.
+// ==========================================
+
 
 const SUBJECTS = [
 
@@ -52,45 +84,54 @@ const SUBJECTS = [
 
 ];
 
+
+// ==========================================
+// Faculty Master Data
+// Add new faculty here.
+// Existing IDs will be updated.
+// Example:
+// {
+//   id: "ABC",
+//   code: "ABC",
+//   name: "Prof. Example Name"
+// }
+// ==========================================
+
+
 const FACULTY = [
+  {
+    id: "UNF",
+    code: "UNF",
+    name: "Prof. Urvisha N. Fatak"
+  },
 
   {
     id: "JKN",
     code: "JKN",
-    name: "Jayesh K. N."
-  },
-
-  {
-    id: "KBC",
-    code: "KBC",
-    name: "KBC"
+    name: "Prof. Jagruti K. Naik"
   },
 
   {
     id: "ARA",
     code: "ARA",
-    name: "ARA"
+    name: "Prof. Amit R. Agrawal"
   },
 
   {
-    id: "PKP",
-    code: "PKP",
-    name: "PKP"
+    id: "ZBM",
+    code: "ZBM",
+    name: "Prof. Zalak B. Modi"
   },
 
   {
-    id: "KSK",
-    code: "KSK",
-    name: "KSK"
-  },
-
-  {
-    id: "STA",
-    code: "STA",
-    name: "STA"
+    id: "KBC",
+    code: "KBC",
+    name: "Prof. Kalpesh B. Chaudhary"
   }
-
 ];
+
+
+// Upload all subjects to Firestore.
 
 async function seedSubjects() {
 
@@ -110,6 +151,8 @@ async function seedSubjects() {
   console.log("Subjects Seeded ✅");
 
 }
+
+// Upload all faculty members to Firestore.
 
 async function seedFaculty() {
 
@@ -132,12 +175,15 @@ async function seedFaculty() {
 
 async function seedDatabase() {
 
-  await seedSubjects();
+  // Seed Subjects Collection
+  // Uncomment only when adding/updating subjects.
+  // await seedSubjects();
 
-  await seedFaculty();
+  // Seed Faculty Collection
+  // Uncomment only when adding/updating faculty.
+  // await seedFaculty();
 
   console.log("Database seeded successfully 🎉");
-
 }
 
-seedDatabase();
+// seedDatabase();

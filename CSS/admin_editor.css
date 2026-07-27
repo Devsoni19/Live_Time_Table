@@ -288,40 +288,40 @@ body.dark .editor-table tbody tr:nth-child(even) {
 
 }
 
-.editor-table th:nth-child(1),
+/**.editor-table th:nth-child(1),
 .editor-table td:nth-child(1) {
   /* width: 1%;
-  white-space: nowrap; */
+  white-space: nowrap; *
 }
 
 .editor-table th:nth-child(2),
 .editor-table td:nth-child(2) {
   /* width: 1%;
-  white-space: nowrap; */
+  white-space: nowrap; *
 }
 
 .editor-table th:nth-child(3),
 .editor-table td:nth-child(3) {
   /* width: 1%;
-  white-space: nowrap; */
+  white-space: nowrap; *
 }
 
 .editor-table th:nth-child(4),
 .editor-table td:nth-child(4) {
   /* width: 1%;
-  white-space: nowrap; */
+  white-space: nowrap; *
 }
 
 .editor-table th:nth-child(5),
 .editor-table td:nth-child(5) {
   /* width: 1%;
-  white-space: nowrap; */
+  white-space: nowrap; *
 }
 
 .editor-table th:nth-child(6),
 .editor-table td:nth-child(6) {
   /* width: 1%;
-  white-space: nowrap; */
+  white-space: nowrap; 
 }
 
 .editor-table th:nth-child(1),
@@ -333,7 +333,7 @@ body.dark .editor-table tbody tr:nth-child(even) {
 .editor-table th:nth-child(6),
 .editor-table td:nth-child(6) {
   text-align: center;
-}
+}**/
 
 .editor-table tbody tr {
 
@@ -346,6 +346,30 @@ body.dark .editor-table tbody tr:nth-child(even) {
   background: rgba(var(--primary-rgb), .05);
 
   box-shadow: inset 4px 0 0 var(--primary);
+
+}
+
+/* Selected Row */
+
+.editor-table tbody tr.selected {
+
+  box-shadow:
+    inset 4px 0 0 var(--primary),
+    inset 0 0 0 1px rgba(var(--primary-rgb), .35);
+
+}
+
+.editor-table tbody tr.selected td {
+
+  background: rgba(var(--primary-rgb), .12);
+
+  font-weight: 600;
+
+}
+
+.editor-table tbody tr.selected:hover td {
+
+  background: rgba(var(--primary-rgb), .18);
 
 }
 

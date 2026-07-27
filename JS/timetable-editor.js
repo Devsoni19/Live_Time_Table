@@ -103,6 +103,8 @@ let isEditing = false;
 
 let SUBJECTS = {};
 
+let selectedLectureId = null;
+
 
 /* ============================================================
    Initialize Editor
@@ -171,6 +173,8 @@ function setupEventListeners() {
     //delete
 
     ELEMENTS.btnDelete.addEventListener("click", deleteLecture);
+
+    setupKeyboardShortcuts();
 
 }
 
@@ -577,6 +581,11 @@ function createLectureRow(lecture, index) {
     tr.dataset.id = lecture.id;
     tr.dataset.day = currentDay;
 
+    // Highlight selected row
+    if (lecture.id === selectedLectureId) {
+        tr.classList.add("selected");
+    }
+
 
     const subject = getSubject(lecture.subject);
 
@@ -661,6 +670,21 @@ function createLectureRow(lecture, index) {
 
 
         });
+
+    // Row Selection
+    tr.addEventListener("click", (e) => {
+
+        // Ignore button clicks
+        if (e.target.closest("button")) return;
+
+        console.log("Selected:", lecture.id);
+
+
+        selectedLectureId = lecture.id;
+
+        renderCurrentDay();
+
+    });
 
     return tr;
 
@@ -790,5 +814,196 @@ async function loadSubjectsDropdown() {
         console.error(err);
 
     }
+
+}
+
+/* ============================================================
+   Keyboard Shortcuts
+============================================================ */
+
+function setupKeyboardShortcuts() {
+
+    document.addEventListener("keydown", (e) => {
+
+        // Ignore while typing
+        if (
+            e.target.tagName === "INPUT" ||
+            e.target.tagName === "TEXTAREA" ||
+            e.target.tagName === "SELECT"
+        ) {
+
+            // ESC should still close modal
+            if (e.key === "Escape" &&
+                !ELEMENTS.modal.classList.contains("hidden")) {
+
+                closeModal();
+            }
+
+            return;
+        }
+
+        // Alt + N
+        if (e.altKey && e.key.toLowerCase() === "n") {
+
+            e.preventDefault();
+
+            openAddModal();
+
+            return;
+        }
+
+        // Ctrl + F
+        if (e.ctrlKey && e.key.toLowerCase() === "f") {
+
+            e.preventDefault();
+
+            ELEMENTS.search.focus();
+
+            ELEMENTS.search.select();
+
+            return;
+        }
+
+        // Ctrl + S
+        if (
+            e.ctrlKey &&
+            e.key.toLowerCase() === "s" &&
+            !ELEMENTS.modal.classList.contains("hidden")
+        ) {
+
+            e.preventDefault();
+
+            saveLecture();
+
+            return;
+        }
+
+        // Alt + 1~5 : Switch Days
+        if (e.altKey && !e.ctrlKey && !e.shiftKey) {
+
+            const dayIndex = parseInt(e.key);
+
+            if (dayIndex >= 1 && dayIndex <= 5) {
+
+                e.preventDefault();
+
+                const tab = ELEMENTS.dayTabs[dayIndex - 1];
+
+                if (tab) {
+
+                    ELEMENTS.dayTabs.forEach(t =>
+                        t.classList.remove("active")
+                    );
+
+                    tab.classList.add("active");
+
+                    currentDay = tab.dataset.day;
+
+                    renderCurrentDay();
+
+                }
+
+                return;
+
+            }
+
+        }
+
+        // ↑ / ↓ : Move Selection
+        if (e.key === "ArrowUp" || e.key === "ArrowDown") {
+
+            e.preventDefault();
+
+            const lectures = timetable[currentDay] || [];
+
+            if (!lectures.length) return;
+
+            let index = lectures.findIndex(
+                lecture => lecture.id === selectedLectureId
+            );
+
+            // Nothing selected yet
+            if (index === -1) {
+
+                selectedLectureId =
+                    e.key === "ArrowDown"
+                        ? lectures[0].id
+                        : lectures[lectures.length - 1].id;
+
+                renderCurrentDay();
+                return;
+            }
+
+            if (e.key === "ArrowDown") {
+
+                index = Math.min(index + 1, lectures.length - 1);
+
+            } else {
+
+                index = Math.max(index - 1, 0);
+
+            }
+
+            selectedLectureId = lectures[index].id;
+
+            renderCurrentDay();
+
+            // Keep selected row visible
+            document.querySelector("tr.selected")
+                ?.scrollIntoView({
+                    block: "nearest",
+                    behavior: "smooth"
+                });
+
+            return;
+
+        }
+
+        // Alt + D : Duplicate Selected Lecture
+        if (e.altKey && e.key.toLowerCase() === "d") {
+
+            e.preventDefault();
+
+            duplicateSelectedLecture();
+
+            return;
+
+        }
+
+        // Enter : Edit Selected Lecture
+        if (e.key === "Enter") {
+
+            e.preventDefault();
+
+            if (!selectedLectureId) return;
+
+            const lectures = timetable[currentDay] || [];
+
+            const lecture = lectures.find(
+                l => l.id === selectedLectureId
+            );
+
+            if (!lecture) return;
+
+            currentLecture = lecture.id;
+
+            openEditModal(lecture);
+
+            return;
+
+        } x
+
+        // ESC
+        if (
+            e.key === "Escape" &&
+            !ELEMENTS.modal.classList.contains("hidden")
+        ) {
+
+            closeModal();
+
+            return;
+        }
+
+    });
 
 }
