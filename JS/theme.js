@@ -11,7 +11,7 @@ export function initTheme(button) {
   document.body.classList.toggle("dark", activeTheme === "dark");
 
   if (button) {
-    button.textContent = activeTheme === "dark" ? "☀️" : "🌙";
+    button.textContent = activeTheme === "dark" ? "🌙" : "☀️";
   }
 }
 
@@ -24,6 +24,6 @@ export function toggleTheme(button) {
   localStorage.setItem("theme", activeTheme);
 
   if (button) {
-    button.textContent = activeTheme === "dark" ? "☀️" : "🌙";
+    button.textContent = activeTheme === "dark" ? "🌙" : "☀️";
   }
 }

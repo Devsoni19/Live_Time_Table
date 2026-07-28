@@ -1016,12 +1016,14 @@ import { initTheme, toggleTheme } from "./theme.js";
   /**
    * Dynamic Theme management (Light vs Dark)
    */
+  // console.log(ELEMENTS.themeBtn);
+  // initTheme(ELEMENTS.themeBtn);
 
-  initTheme(ELEMENTS.themeBtn);
-
-  ELEMENTS.themeBtn.addEventListener("click", () => {
-    toggleTheme(ELEMENTS.themeBtn);
-  });
+  // ELEMENTS.themeBtn.addEventListener("click", () => {
+  //   console.log("clicked");
+  //   toggleTheme(ELEMENTS.themeBtn);
+  //   toggleTheme(ELEMENTS.themeBtn);
+  // });
 
 
   /*** Vanilla JS Falling Confetti (completely offline, self-contained)*/
@@ -1529,16 +1531,18 @@ import { initTheme, toggleTheme } from "./theme.js";
   // ==========================================
   // 13. Event Listeners & Bootstrapping
   // ==========================================
-
+  console.log(ELEMENTS.themeBtn);
   function setupEventListeners() {
     // Theme Switch
-    ELEMENTS.themeBtn.addEventListener("click", toggleTheme);
-
+    ELEMENTS.themeBtn.addEventListener("click", () => {
+      toggleTheme(ELEMENTS.themeBtn);
+    });
     // Keyboard Shortcuts
     document.addEventListener("keydown", (e) => {
       // Toggle theme with 'T' (case-insensitive)
-      if (e.key.toLowerCase() === 't' && document.activeElement !== ELEMENTS.searchInput) {
-        toggleTheme();
+      if (e.key.toLowerCase() === 't' &&
+        document.activeElement !== ELEMENTS.searchInput) {
+        toggleTheme(ELEMENTS.themeBtn);
       }
     });
 
@@ -1709,10 +1713,7 @@ import { initTheme, toggleTheme } from "./theme.js";
 
 
     // 1. Sync Theme System
-    initTheme();
-
-    // await uploadTimetable();
-
+    initTheme(ELEMENTS.themeBtn);
 
     // 2. Render base layout
 
