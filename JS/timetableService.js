@@ -11,14 +11,7 @@ import {
   onSnapshot
 } from "./firebase.js";
 
-const DAYS = [
-  "Monday",
-  "Tuesday",
-  "Wednesday",
-  "Thursday",
-  "Friday",
-  "Saturday"
-];
+import { DAYS } from "./constants.js";
 
 class TimetableService {
 

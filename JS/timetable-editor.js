@@ -14,7 +14,8 @@ import {
 
 import timetableService from "./timetableService.js";
 
-const ADMIN_EMAIL = "sdev.19072003@gmail.com";
+import { ADMIN_EMAIL } from "./constants.js";
+
 
 console.log("Editor JS Loaded");
 

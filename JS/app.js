@@ -34,9 +34,21 @@ import {
 
 // console.log("app.js loaded", performance.now());
 
+import { CacheService } from "./cacheService.js";
+
 import timetableService from "./timetableService.js";
 
 import { initTheme, toggleTheme } from "./theme.js";
+
+import { DAYS } from "./constants.js";
+
+import { APP } from "./constants.js";
+
+import { ADMIN_EMAIL } from "./constants.js";
+
+console.log(APP.VERSION);
+
+
 
 (function () {
   'use strict';
@@ -119,9 +131,8 @@ import { initTheme, toggleTheme } from "./theme.js";
   // console.log(ELEMENTS.previewTitle);
   // console.log(ELEMENTS.previewDay);
 
-  const DAYS = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
-  const APP_VERSION = "1.1.0";
-  const ADMIN_EMAIL = "sdev.19072003@gmail.com";
+
+  // const ADMIN_EMAIL = "sdev.19072003@gmail.com";
   const SUBJECT_ALIASES = {
     CN: ["Computer Networks"],
     PDS: ["Python for Data Science"],
@@ -1625,6 +1636,51 @@ import { initTheme, toggleTheme } from "./theme.js";
   /**
    * Main setup sequence
    */
+
+  /**
+ * ==========================================================
+ * Load timetable from local cache (if available)
+ *
+ * Firestore remains the source of truth.
+ * Cache is used only for:
+ * - Faster startup
+ * - Offline usage
+ * ==========================================================
+ */
+  function loadCachedTimetable() {
+
+    const cachedTimetable = CacheService.load();
+
+    if (!cachedTimetable) {
+
+      console.log("📦 No cached timetable found.");
+
+      return false;
+
+    }
+
+    console.log("⚡ Loaded timetable from cache.");
+
+    TIMETABLE = cachedTimetable;
+
+    // Build UI immediately from cached data
+    buildTimetable();
+
+    // Restore current view mode
+    updateViewMode();
+
+    // Update live lecture tracker
+    trackLiveSchedule();
+
+    // Refresh schedule preview
+    updateTomorrowPreview();
+
+    // Refresh search results if the user had typed something
+    filterLectures();
+
+    return true;
+
+  }
 
 
   //Real time update of Time Table
