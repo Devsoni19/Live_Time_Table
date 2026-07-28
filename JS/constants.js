@@ -30,6 +30,7 @@ export const APP = {
  * ====================================================== */
 
 export const DAYS = [
+  "Sunday",
   "Monday",
   "Tuesday",
   "Wednesday",

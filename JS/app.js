@@ -253,6 +253,17 @@ console.log(APP.VERSION);
 
   // State flags
 
+  /**
+   * ==========================================================
+   * Realtime Sync State
+   * ==========================================================
+   */
+
+  // Days received during the initial Firestore sync
+  let initialSyncDays = new Set();
+
+  // Prevent rebuilding multiple times during startup
+  let initialRealtimeSyncCompleted = false;
 
   let activeView = "daily"; // 'daily' or 'weekly'
   let notificationsEnabled = false;
@@ -1690,6 +1701,31 @@ console.log(APP.VERSION);
 
       TIMETABLE[day] = lectures;
 
+      // Keep offline cache updated
+      CacheService.save(TIMETABLE);
+
+      /**
+        * Initial sync
+        *
+        * Wait until every day's first snapshot arrives
+        * before rebuilding the timetable.
+        */
+      if (!initialRealtimeSyncCompleted) {
+
+        initialSyncDays.add(day);
+
+        if (initialSyncDays.size < DAYS.length) {
+
+          return;
+
+        }
+
+        initialRealtimeSyncCompleted = true;
+
+        console.log("✅ Initial realtime sync completed.");
+
+      }
+
       buildTimetable();
 
       updateViewMode();
@@ -1697,6 +1733,9 @@ console.log(APP.VERSION);
       trackLiveSchedule();
 
       updateTomorrowPreview();
+
+      filterLectures();
+
 
     });
 
