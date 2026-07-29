@@ -20,13 +20,15 @@ export const APP = {
 
   NAME: "VGEC Timetable",
 
-  VERSION: "1.4.0"
+  VERSION: "1.4.1"
 
 };
 
 
 /* ======================================================
  * Days
+ * Keep Days Sequence as Sun, Mon, ... , Sat 
+ * otherwise timetable will display wrong day's schedule
  * ====================================================== */
 
 export const DAYS = [

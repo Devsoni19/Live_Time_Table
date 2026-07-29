@@ -2,17 +2,26 @@
    VGEC Timetable - PWA Service Worker (Stale-While-Revalidate Caching Model)
    ========================================================================== */
 
-const CACHE_NAME = "vgec-timetable-cache-v1.3.0";
+const CACHE_NAME = "vgec-timetable-cache-v1.3.3";
 
 const PRECACHE_ASSETS = [
-  "./",
-  "./index.html",
-  "./style.css",
-  "./app.js",
-  "./manifest.json",
-  "./logo.png",
-  "./icons/icon-192.png",
-  "./icons/icon-512.png"
+  "/",
+  "/index.html",
+  "/manifest.json",
+
+  "/CSS/style.css",
+
+  "/JS/app.js",
+  "/JS/cacheService.js",
+  "/JS/constants.js",
+  "/JS/firebase.js",
+  "/JS/theme.js",
+  "/JS/timetableService.js",
+
+  "/icons/icon-192.png",
+  "/icons/icon-512.png",
+
+  "/References/logo.png"
 ];
 
 // Cache rules for Google Fonts
@@ -27,9 +36,18 @@ const GOOGLE_FONT_DOMAINS = [
 self.addEventListener("install", event => {
   event.waitUntil(
     caches.open(CACHE_NAME)
-      .then(cache => {
+      .then(async cache => {
         console.log("[Service Worker] Caching app shell assets...");
-        return cache.addAll(PRECACHE_ASSETS);
+        return await Promise.all(
+          PRECACHE_ASSETS.map(async asset => {
+            try {
+              await cache.add(asset);
+              console.log("✅ Cached:", asset);
+            } catch (err) {
+              console.error("❌ Failed to cache:", asset, err);
+            }
+          })
+        );
       })
       .then(() => self.skipWaiting())
       .catch(err => {
